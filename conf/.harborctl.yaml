@@ -1,0 +1,6 @@
+# harborctl configuration file (located at conf/ by default)
+---
+
+scheme: https
+# specify harbor endpoint address
+target: localhost
