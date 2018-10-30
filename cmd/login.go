@@ -30,11 +30,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var loginURL string
+
 // loginCmd represents the login command
 var loginCmd = &cobra.Command{
 	Use:   "login",
 	Short: "Log in to Harbor.",
-	Long:  `Log in to Harbor with username and password.`,
+	Long: `Log in to Harbor with username and password.
+
+NOTE: each login will update conf/.cookie.yaml`,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		loginURL = utils.URLGen("/login")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		loginHarbor()
 	},
@@ -73,12 +80,10 @@ func loginHarbor() {
 		fmt.Println("WARNING! Using --password via the CLI is insecure.")
 	}
 
-	targetURL := utils.URLGen("/login")
+	targetURL := loginURL
 	fmt.Println("==> POST", targetURL)
 
-	//fmt.Printf("==> username: %s   password: %s   escape: %s\n", li.username, li.password, url.QueryEscape(li.password))
-
-	utils.Request.Post(targetURL).
+	utils.AgentGet().Post(targetURL).
 		Set("Content-Type", "application/x-www-form-urlencoded;param=value").
 		// NOTE:
 		// After some experiments, conclude that the value of Cookie has two forms:

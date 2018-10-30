@@ -29,11 +29,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var logoutURL string
+
 // logoutCmd represents the logout command
 var logoutCmd = &cobra.Command{
 	Use:   "logout",
 	Short: "Log out from Harbor.",
-	Long:  `Log out current user from Harbor.`,
+	Long: `Log out current user from Harbor.
+
+NOTE: multiple logout cause nothing happened.`,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		logoutURL = utils.URLGen("/log_out")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		logoutHarbor()
 	},
@@ -44,18 +51,10 @@ func init() {
 }
 
 func logoutHarbor() {
-	targetURL := utils.URLGen("/log_out")
+	targetURL := logoutURL
 	fmt.Println("==> GET", targetURL)
 
-	c, err := utils.CookieLoad()
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-
-	utils.Request.Get(targetURL).
-		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
-		End(logoutProc)
+	utils.AgentGet().Get(targetURL).End(logoutProc)
 }
 
 // logoutProc is the callback function for logout.

@@ -21,18 +21,23 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/moooofly/harborctl/utils"
 	"github.com/spf13/cobra"
 )
+
+var searchURL string
 
 // searchCmd represents the search command
 var searchCmd = &cobra.Command{
 	Use:   "search",
 	Short: "Search for projects and repositories.",
 	Long: `The Search endpoint returns information about the projects and repositories offered at public status
-or related to the current logged in user. The response includes the project and repository list in a proper display order.`,
+or related to the current logged in user. The response includes the project and repository list in a proper display order.
+
+NOTE: This endpoint can be used without cookie.`,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		searchURL = utils.URLGen("/api/search")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		searchAll()
 	},
@@ -50,20 +55,11 @@ func init() {
 
 // searchAll returns information about the projects and repositories offered at public status or related to the current logged in user.
 func searchAll() {
-	targetURL := utils.URLGen("/api/search") + "?q=" + search.query
-	fmt.Println("==> GET", targetURL)
+	targetURL := searchURL + "?q=" + search.query
+	utils.Get(targetURL)
 
 	// NOTE:
 	// As experiment shows, "/api/search" can be used without cookie setting,
 	// which can be verified by "offered at public status or related to the current logged in user" from doc.
-	// The cookie setting here is redundant.
-	c, err := utils.CookieLoad()
-	if err != nil {
-		fmt.Println("error:", err)
-		return
-	}
-
-	utils.Request.Get(targetURL).
-		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
-		End(utils.PrintStatus)
+	// The cookie setting above is redundant.
 }
