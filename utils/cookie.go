@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -73,17 +74,17 @@ func CookieClean() {
 }
 
 // CookieLoad loads beegosessionID from .cookie.yaml.
-func CookieLoad() (*Beegocookie, error) {
+func CookieLoad() (string, error) {
 	var cookie Beegocookie
 
 	dataBytes, err := ioutil.ReadFile(secretfile)
 	if err != nil {
-		return nil, err
+		return "", errors.New("< YOU MUST LOGIN FIRST >")
 	}
 	err = yaml.Unmarshal([]byte(dataBytes), &cookie)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return &cookie, nil
+	return cookie.BeegosessionID, nil
 }
