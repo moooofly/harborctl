@@ -145,8 +145,8 @@ func init() {
 // projectCmd represents the project command
 var projectCmd = &cobra.Command{
 	Use:   "project",
-	Short: "API of '/projects'.",
-	Long:  `The collection of '/projects' API.`,
+	Short: "'/projects' API.",
+	Long:  `The subcommand of '/projects' hierachy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		projectURL = utils.URLGen("/api/projects")
 	},
