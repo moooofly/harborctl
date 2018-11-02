@@ -1,3 +1,15 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/moooofly/harborctl/compare/v0.1.0...v0.2.0) (2018-11-02)
+
+
+### Features
+
+* **project-api:** add "/projects/{project_id}/logs" API ([e3cd578](https://github.com/moooofly/harborctl/commit/e3cd578))
+* **project-api:** add "/projects/{project_id}/members" APIs ([564386f](https://github.com/moooofly/harborctl/commit/564386f))
+* **project-api:** add metadata related APIs for 'project' ([8d8c69e](https://github.com/moooofly/harborctl/commit/8d8c69e))
+
+
+
 <a name="0.1.0"></a>
 #  (2018-10-30)
 
