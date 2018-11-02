@@ -31,16 +31,6 @@ import (
 
 var projectURL string
 
-func init() {
-	rootCmd.AddCommand(projectCmd)
-
-	initProjectGet()
-	initProjectDelete()
-	initProjectCreate()
-	initProjectUpdate()
-	initProjectList()
-}
-
 // projectCmd represents the project command
 var projectCmd = &cobra.Command{
 	Use:   "project",
@@ -52,6 +42,16 @@ var projectCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Use \"harborctl project --help\" for more information about this command.")
 	},
+}
+
+func init() {
+	rootCmd.AddCommand(projectCmd)
+
+	initProjectGet()
+	initProjectDelete()
+	initProjectCreate()
+	initProjectUpdate()
+	initProjectList()
 }
 
 // projectGetCmd represents the get command
@@ -183,16 +183,20 @@ func projectCreate() {
 // projectUpdateCmd represents the update command
 var projectUpdateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Update properties for a selected project by project_id.",
-	Long:  `This endpoint is aimed to update the properties of a project.`,
+	Short: "Update properties for a selected project by project_id. (not working as expect right now)",
+	Long: `This endpoint is aimed to update the properties of a project.
+
+NOTE: not working as expect right now, see https://github.com/moooofly/harborctl/issues/1 for details.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		projectUpdate()
 	},
 }
 
+// TODO(moooofly): should update this by https://github.com/moooofly/harborctl/issues/1
 var prjUpdate struct {
 	projectID int64
 
+	// NOTE: this item is useless right now according to test result.
 	ProjectName string `json:"project_name"`
 
 	// metadata
