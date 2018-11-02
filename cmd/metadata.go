@@ -32,7 +32,7 @@ import (
 // metadataCmd represents the metadata command
 var metadataCmd = &cobra.Command{
 	Use:   "metadata",
-	Short: "/projects/{project_id}/metadatas API.",
+	Short: "'/projects/{project_id}/metadatas' API.",
 	Long:  `The subcommand of '/projects/{project_id}/metadatas' hierachy.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Use \"harborctl project metadata --help\" for more information about this command.")
@@ -42,16 +42,46 @@ var metadataCmd = &cobra.Command{
 func init() {
 	projectCmd.AddCommand(metadataCmd)
 
+	initMetadataAdd()
+	initMetadataDelete()
+	initMetadataGet()
+	initMetadataUpdate()
+}
+
+// addMetaCmd represents the add command
+var addMetaCmd = &cobra.Command{
+	Use:   "add",
+	Short: "Add all metadatas for a project. (NOTE: there exists a bug, not working well right now)",
+	Long: `This endpoint is aimed to add all metadatas for a project.
+
+NOTE: there is a bug with this API, see https://github.com/moooofly/harbor-go-client/issues/23 first.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		addProjectMetadata()
+	},
+}
+
+var prjMetaAdd struct {
+	projectID int64
+
+	// metadata
+	Public                                     int64  `json:"public"`
+	EnablelontentTrust                         bool   `json:"enable_content_trust"`
+	PreventVulnerableImagesFromRunning         bool   `json:"prevent_vulnerable_images_from_running"`
+	PreventVulnerableImagesFromRunningSeverity string `json:"prevent_vulnerable_images_from_running_severity"`
+	AutomaticallyScanImagesOnPush              bool   `json:"automatically_scan_images_on_push"`
+}
+
+func initMetadataAdd() {
 	metadataCmd.AddCommand(addMetaCmd)
 
-	addMetaCmd.Flags().Int32VarP(&prjMetaAdd.projectID,
+	addMetaCmd.Flags().Int64VarP(&prjMetaAdd.projectID,
 		"project_id",
 		"j", 0,
 		"(REQUIRED) Project ID of project which will be get.")
 	addMetaCmd.MarkFlagRequired("project_id")
 
 	// metadata
-	addMetaCmd.Flags().Int32VarP(&prjMetaAdd.Public,
+	addMetaCmd.Flags().Int64VarP(&prjMetaAdd.Public,
 		"public",
 		"k", 1,
 		"The public status of the project, public(1) or private(0).")
@@ -72,76 +102,12 @@ func init() {
 		"automatically_scan_images_on_push",
 		"a", false,
 		"Whether scan images automatically when pushing.")
-
-	metadataCmd.AddCommand(deleteMetaCmd)
-
-	deleteMetaCmd.Flags().Int32VarP(&prjMetaDel.projectID,
-		"project_id",
-		"j", 0,
-		"(REQUIRED) Project ID of project which will be deleted.")
-	deleteMetaCmd.MarkFlagRequired("project_id")
-
-	deleteMetaCmd.Flags().StringVarP(&prjMetaDel.metaName,
-		"meta_name",
-		"m", "",
-		"(REQUIRED) The name of a specific metadata.")
-	deleteMetaCmd.MarkFlagRequired("meta_name")
-
-	metadataCmd.AddCommand(getMetaCmd)
-
-	getMetaCmd.Flags().Int32VarP(&prjMetaGet.projectID,
-		"project_id",
-		"j", 0,
-		"(REQUIRED) Project ID of project which will be get.")
-	getMetaCmd.MarkFlagRequired("project_id")
-
-	getMetaCmd.Flags().StringVarP(&prjMetaGet.metaName,
-		"meta_name",
-		"m", "",
-		"The name of a specific metadata.")
-
-	metadataCmd.AddCommand(updateMetaCmd)
-
-	updateMetaCmd.Flags().Int32VarP(&prjMetaUpdate.projectID,
-		"project_id",
-		"j", 0,
-		"(REQUIRED) Project ID of project which will be updated.")
-	updateMetaCmd.MarkFlagRequired("project_id")
-
-	updateMetaCmd.Flags().StringVarP(&prjMetaUpdate.MetaName,
-		"meta_name",
-		"m", "",
-		"(REQUIRED) The name of a specific metadata.")
-	updateMetaCmd.MarkFlagRequired("meta_name")
-}
-
-// addCmd represents the add command
-var addMetaCmd = &cobra.Command{
-	Use:   "add",
-	Short: "Add all metadatas for a project. (NOTE: there exists a bug, not working well right now)",
-	Long: `This endpoint is aimed to add all metadatas for a project.
-
-NOTE: there is a bug with this API, see https://github.com/moooofly/harbor-go-client/issues/23 first.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		addProjectMetadata()
-	},
-}
-
-var prjMetaAdd struct {
-	projectID int32
-
-	// metadata
-	Public                                     int32  `json:"public"`
-	EnablelontentTrust                         bool   `json:"enable_content_trust"`
-	PreventVulnerableImagesFromRunning         bool   `json:"prevent_vulnerable_images_from_running"`
-	PreventVulnerableImagesFromRunningSeverity string `json:"prevent_vulnerable_images_from_running_severity"`
-	AutomaticallyScanImagesOnPush              bool   `json:"automatically_scan_images_on_push"`
 }
 
 // NOTE: This API has a related issue (https://github.com/moooofly/harbor-go-client/issues/23)
 // Codes here not work well as the issue above.
 func addProjectMetadata() {
-	targetURL := projectURL + "/" + strconv.FormatInt(int64(prjMetaAdd.projectID), 10) + "/metadatas"
+	targetURL := projectURL + "/" + strconv.FormatInt(prjMetaAdd.projectID, 10) + "/metadatas"
 
 	p, err := json.Marshal(&prjMetaAdd)
 	if err != nil {
@@ -163,12 +129,28 @@ var deleteMetaCmd = &cobra.Command{
 }
 
 var prjMetaDel struct {
-	projectID int32
+	projectID int64
 	metaName  string
 }
 
+func initMetadataDelete() {
+	metadataCmd.AddCommand(deleteMetaCmd)
+
+	deleteMetaCmd.Flags().Int64VarP(&prjMetaDel.projectID,
+		"project_id",
+		"j", 0,
+		"(REQUIRED) Project ID of project which will be deleted.")
+	deleteMetaCmd.MarkFlagRequired("project_id")
+
+	deleteMetaCmd.Flags().StringVarP(&prjMetaDel.metaName,
+		"meta_name",
+		"m", "",
+		"(REQUIRED) The name of a specific metadata.")
+	deleteMetaCmd.MarkFlagRequired("meta_name")
+}
+
 func delProjectMetadata() {
-	targetURL := projectURL + "/" + strconv.FormatInt(int64(prjMetaDel.projectID), 10) +
+	targetURL := projectURL + "/" + strconv.FormatInt(prjMetaDel.projectID, 10) +
 		"/metadatas/" + prjMetaDel.metaName
 	utils.Delete(targetURL)
 }
@@ -186,15 +168,30 @@ NOTE: This endpoint can be used without cookie.`,
 }
 
 var prjMetaGet struct {
-	projectID int32
+	projectID int64
 	metaName  string
+}
+
+func initMetadataGet() {
+	metadataCmd.AddCommand(getMetaCmd)
+
+	getMetaCmd.Flags().Int64VarP(&prjMetaGet.projectID,
+		"project_id",
+		"j", 0,
+		"(REQUIRED) Project ID of project which will be get.")
+	getMetaCmd.MarkFlagRequired("project_id")
+
+	getMetaCmd.Flags().StringVarP(&prjMetaGet.metaName,
+		"meta_name",
+		"m", "",
+		"The name of a specific metadata.")
 }
 
 // NOTE: Codes here support two APIs below
 // - GET /projects/{project_id}/metadatas
 // - GET /projects/{project_id}/metadatas/{meta_name}
 func getProjectMetadata() {
-	targetURL := projectURL + "/" + strconv.FormatInt(int64(prjMetaGet.projectID), 10) +
+	targetURL := projectURL + "/" + strconv.FormatInt(prjMetaGet.projectID, 10) +
 		"/metadatas/" + prjMetaGet.metaName
 	utils.Get(targetURL)
 }
@@ -212,14 +209,30 @@ NOTE: there is a bug with this API, see https://github.com/moooofly/harbor-go-cl
 }
 
 var prjMetaUpdate struct {
-	projectID int32
+	projectID int64
 	MetaName  string `json:"meta_name"`
+}
+
+func initMetadataUpdate() {
+	metadataCmd.AddCommand(updateMetaCmd)
+
+	updateMetaCmd.Flags().Int64VarP(&prjMetaUpdate.projectID,
+		"project_id",
+		"j", 0,
+		"(REQUIRED) Project ID of project which will be updated.")
+	updateMetaCmd.MarkFlagRequired("project_id")
+
+	updateMetaCmd.Flags().StringVarP(&prjMetaUpdate.MetaName,
+		"meta_name",
+		"m", "",
+		"(REQUIRED) The name of a specific metadata.")
+	updateMetaCmd.MarkFlagRequired("meta_name")
 }
 
 // NOTE: There is a related issue (https://github.com/moooofly/harbor-go-client/issues/24)
 // Codes here have changed accordingly already.
 func updateProjectMetadata() {
-	targetURL := projectURL + "/" + strconv.FormatInt(int64(prjMetaUpdate.projectID), 10) + "/metadatas"
+	targetURL := projectURL + "/" + strconv.FormatInt(prjMetaUpdate.projectID, 10) + "/metadatas"
 
 	p, err := json.Marshal(&prjMetaUpdate)
 	if err != nil {

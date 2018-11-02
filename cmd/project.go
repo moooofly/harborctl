@@ -34,112 +34,11 @@ var projectURL string
 func init() {
 	rootCmd.AddCommand(projectCmd)
 
-	projectCmd.AddCommand(getCmd)
-
-	getCmd.Flags().Int32VarP(&prjGet.projectID,
-		"project_id",
-		"j", 0,
-		"(REQUIRED) Project ID of project which will be get.")
-	getCmd.MarkFlagRequired("project_id")
-
-	projectCmd.AddCommand(deleteCmd)
-
-	deleteCmd.Flags().Int32VarP(&prjDelete.projectID,
-		"project_id",
-		"j", 0,
-		"(REQUIRED) Project ID of project which will be deleted.")
-	deleteCmd.MarkFlagRequired("project_id")
-
-	projectCmd.AddCommand(createCmd)
-
-	createCmd.Flags().StringVarP(&prjCreate.ProjectName,
-		"project_name",
-		"n", "",
-		"(REQUIRED) The name of the project.")
-	createCmd.MarkFlagRequired("project_name")
-
-	// metadata
-	createCmd.Flags().Int32VarP(&prjCreate.Public,
-		"public",
-		"k", 1,
-		"The public status of the project, public(1) or private(0).")
-
-	createCmd.Flags().BoolVarP(&prjCreate.EnablelontentTrust,
-		"enable_content_trust",
-		"t", false,
-		"Whether content trust is enabled or not. If it is enabled, user cann't pull unsigned images from this project.")
-	createCmd.Flags().BoolVarP(&prjCreate.PreventVulnerableImagesFromRunning,
-		"prevent_vulnerable_images_from_running",
-		"r", false,
-		"Whether prevent the vulnerable images from running.")
-	createCmd.Flags().StringVarP(&prjCreate.PreventVulnerableImagesFromRunningSeverity,
-		"prevent_vulnerable_images_from_running_severity",
-		"s", "",
-		"If the vulnerability is high than severity defined here, the images cann't be pulled.")
-	createCmd.Flags().BoolVarP(&prjCreate.AutomaticallyScanImagesOnPush,
-		"automatically_scan_images_on_push",
-		"a", false,
-		"Whether scan images automatically when pushing.")
-
-	projectCmd.AddCommand(updateCmd)
-
-	updateCmd.Flags().Int32VarP(&prjUpdate.projectID,
-		"project_id",
-		"j", 0,
-		"(REQUIRED) Project ID of project which will be update.")
-	updateCmd.MarkFlagRequired("project_id")
-
-	updateCmd.Flags().StringVarP(&prjUpdate.ProjectName,
-		"project_name",
-		"n", "",
-		"The name of the project.")
-
-	// metadata
-	updateCmd.Flags().Int32VarP(&prjUpdate.Public,
-		"public",
-		"k", 1,
-		"The public status of the project, public(1) or private(0).")
-
-	updateCmd.Flags().BoolVarP(&prjUpdate.EnablelontentTrust,
-		"enable_content_trust",
-		"t", false,
-		"Whether content trust is enabled or not. If it is enabled, user cann't pull unsigned images from this project.")
-	updateCmd.Flags().BoolVarP(&prjUpdate.PreventVulnerableImagesFromRunning,
-		"prevent_vulnerable_images_from_running",
-		"r", false,
-		"Whether prevent the vulnerable images from running.")
-	updateCmd.Flags().StringVarP(&prjUpdate.PreventVulnerableImagesFromRunningSeverity,
-		"prevent_vulnerable_images_from_running_severity",
-		"s", "",
-		"If the vulnerability is high than severity defined here, the images cann't be pulled.")
-	updateCmd.Flags().BoolVarP(&prjUpdate.AutomaticallyScanImagesOnPush,
-		"automatically_scan_images_on_push",
-		"a", false,
-		"Whether scan images automatically when pushing.")
-
-	projectCmd.AddCommand(listCmd)
-
-	listCmd.Flags().StringVarP(&prjList.name,
-		"name",
-		"n", "",
-		"The name of project.")
-	listCmd.Flags().StringVarP(&prjList.public,
-		"public",
-		"k", "",
-		"The project is public or private.")
-	listCmd.Flags().StringVarP(&prjList.owner,
-		"owner",
-		"o", "",
-		"The name of project owner.")
-	listCmd.Flags().Int32VarP(&prjList.page,
-		"page",
-		"p", 1,
-		"The page nubmer, default is 1.")
-	listCmd.Flags().Int32VarP(&prjList.pageSize,
-		"page_size",
-		"s", 10,
-		"The size of per page, default is 10, maximum is 100.")
-
+	initProjectGet()
+	initProjectDelete()
+	initProjectCreate()
+	initProjectUpdate()
+	initProjectList()
 }
 
 // projectCmd represents the project command
@@ -155,8 +54,8 @@ var projectCmd = &cobra.Command{
 	},
 }
 
-// getCmd represents the get command
-var getCmd = &cobra.Command{
+// projectGetCmd represents the get command
+var projectGetCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Get a project by project_id.",
 	Long: `This endpoint returns specific project information by project_id.
@@ -168,16 +67,26 @@ NOTE: This endpoint can be used without cookie.`,
 }
 
 var prjGet struct {
-	projectID int32
+	projectID int64
+}
+
+func initProjectGet() {
+	projectCmd.AddCommand(projectGetCmd)
+
+	projectGetCmd.Flags().Int64VarP(&prjGet.projectID,
+		"project_id",
+		"j", 0,
+		"(REQUIRED) Project ID of project which will be get.")
+	projectGetCmd.MarkFlagRequired("project_id")
 }
 
 func projectGet() {
-	targetURL := projectURL + "/" + strconv.FormatInt(int64(prjGet.projectID), 10)
+	targetURL := projectURL + "/" + strconv.FormatInt(prjGet.projectID, 10)
 	utils.Get(targetURL)
 }
 
-// deleteCmd represents the delete command
-var deleteCmd = &cobra.Command{
+// projectDeleteCmd represents the delete command
+var projectDeleteCmd = &cobra.Command{
 	Use:   "delete",
 	Short: "Delete a project by project_id.",
 	Long:  `This endpoint is aimed to delete a project by project_id.`,
@@ -187,16 +96,26 @@ var deleteCmd = &cobra.Command{
 }
 
 var prjDelete struct {
-	projectID int32
+	projectID int64
+}
+
+func initProjectDelete() {
+	projectCmd.AddCommand(projectDeleteCmd)
+
+	projectDeleteCmd.Flags().Int64VarP(&prjDelete.projectID,
+		"project_id",
+		"j", 0,
+		"(REQUIRED) Project ID of project which will be deleted.")
+	projectDeleteCmd.MarkFlagRequired("project_id")
 }
 
 func projectDelete() {
-	targetURL := projectURL + "/" + strconv.FormatInt(int64(prjDelete.projectID), 10)
+	targetURL := projectURL + "/" + strconv.FormatInt(prjDelete.projectID, 10)
 	utils.Delete(targetURL)
 }
 
-// createCmd represents the create command
-var createCmd = &cobra.Command{
+// projectCreateCmd represents the create command
+var projectCreateCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new project.",
 	Long:  `This endpoint is for user to create a new project.`,
@@ -209,11 +128,44 @@ var prjCreate struct {
 	ProjectName string `json:"project_name"`
 
 	// metadata
-	Public                                     int32  `json:"public"`
+	Public                                     int64  `json:"public"`
 	EnablelontentTrust                         bool   `json:"enable_content_trust"`
 	PreventVulnerableImagesFromRunning         bool   `json:"prevent_vulnerable_images_from_running"`
 	PreventVulnerableImagesFromRunningSeverity string `json:"prevent_vulnerable_images_from_running_severity"`
 	AutomaticallyScanImagesOnPush              bool   `json:"automatically_scan_images_on_push"`
+}
+
+func initProjectCreate() {
+	projectCmd.AddCommand(projectCreateCmd)
+
+	projectCreateCmd.Flags().StringVarP(&prjCreate.ProjectName,
+		"project_name",
+		"n", "",
+		"(REQUIRED) The name of the project.")
+	projectCreateCmd.MarkFlagRequired("project_name")
+
+	// metadata
+	projectCreateCmd.Flags().Int64VarP(&prjCreate.Public,
+		"public",
+		"k", 1,
+		"The public status of the project, public(1) or private(0).")
+
+	projectCreateCmd.Flags().BoolVarP(&prjCreate.EnablelontentTrust,
+		"enable_content_trust",
+		"t", false,
+		"Whether content trust is enabled or not. If it is enabled, user cann't pull unsigned images from this project.")
+	projectCreateCmd.Flags().BoolVarP(&prjCreate.PreventVulnerableImagesFromRunning,
+		"prevent_vulnerable_images_from_running",
+		"r", false,
+		"Whether prevent the vulnerable images from running.")
+	projectCreateCmd.Flags().StringVarP(&prjCreate.PreventVulnerableImagesFromRunningSeverity,
+		"prevent_vulnerable_images_from_running_severity",
+		"s", "",
+		"If the vulnerability is high than severity defined here, the images cann't be pulled.")
+	projectCreateCmd.Flags().BoolVarP(&prjCreate.AutomaticallyScanImagesOnPush,
+		"automatically_scan_images_on_push",
+		"a", false,
+		"Whether scan images automatically when pushing.")
 }
 
 func projectCreate() {
@@ -228,8 +180,8 @@ func projectCreate() {
 	utils.Post(targetURL, string(p))
 }
 
-// updateCmd represents the update command
-var updateCmd = &cobra.Command{
+// projectUpdateCmd represents the update command
+var projectUpdateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update properties for a selected project by project_id.",
 	Long:  `This endpoint is aimed to update the properties of a project.`,
@@ -239,20 +191,58 @@ var updateCmd = &cobra.Command{
 }
 
 var prjUpdate struct {
-	projectID int32
+	projectID int64
 
 	ProjectName string `json:"project_name"`
 
 	// metadata
-	Public                                     int32  `json:"public"`
+	Public                                     int64  `json:"public"`
 	EnablelontentTrust                         bool   `json:"enable_content_trust"`
 	PreventVulnerableImagesFromRunning         bool   `json:"prevent_vulnerable_images_from_running"`
 	PreventVulnerableImagesFromRunningSeverity string `json:"prevent_vulnerable_images_from_running_severity"`
 	AutomaticallyScanImagesOnPush              bool   `json:"automatically_scan_images_on_push"`
 }
 
+func initProjectUpdate() {
+	projectCmd.AddCommand(projectUpdateCmd)
+
+	projectUpdateCmd.Flags().Int64VarP(&prjUpdate.projectID,
+		"project_id",
+		"j", 0,
+		"(REQUIRED) Project ID of project which will be update.")
+	projectUpdateCmd.MarkFlagRequired("project_id")
+
+	projectUpdateCmd.Flags().StringVarP(&prjUpdate.ProjectName,
+		"project_name",
+		"n", "",
+		"The name of the project.")
+
+	// metadata
+	projectUpdateCmd.Flags().Int64VarP(&prjUpdate.Public,
+		"public",
+		"k", 1,
+		"The public status of the project, public(1) or private(0).")
+
+	projectUpdateCmd.Flags().BoolVarP(&prjUpdate.EnablelontentTrust,
+		"enable_content_trust",
+		"t", false,
+		"Whether content trust is enabled or not. If it is enabled, user cann't pull unsigned images from this project.")
+	projectUpdateCmd.Flags().BoolVarP(&prjUpdate.PreventVulnerableImagesFromRunning,
+		"prevent_vulnerable_images_from_running",
+		"r", false,
+		"Whether prevent the vulnerable images from running.")
+	projectUpdateCmd.Flags().StringVarP(&prjUpdate.PreventVulnerableImagesFromRunningSeverity,
+		"prevent_vulnerable_images_from_running_severity",
+		"s", "",
+		"If the vulnerability is high than severity defined here, the images cann't be pulled.")
+	projectUpdateCmd.Flags().BoolVarP(&prjUpdate.AutomaticallyScanImagesOnPush,
+		"automatically_scan_images_on_push",
+		"a", false,
+		"Whether scan images automatically when pushing.")
+}
+
 func projectUpdate() {
-	targetURL := projectURL + "/" + strconv.FormatInt(int64(prjUpdate.projectID), 10)
+	targetURL := projectURL + "/" + strconv.FormatInt(prjUpdate.projectID, 10)
 
 	p, err := json.Marshal(&prjUpdate)
 	if err != nil {
@@ -263,8 +253,8 @@ func projectUpdate() {
 	utils.Put(targetURL, string(p))
 }
 
-// listCmd represents the list command
-var listCmd = &cobra.Command{
+// projectListCmd represents the list command
+var projectListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all projects by filter.",
 	Long: `This endpoint returns all projects created by Harbor which can be filtered by (project) name, owner and public property.
@@ -273,6 +263,31 @@ NOTE: This endpoint can be used without cookie.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		projectList()
 	},
+}
+
+func initProjectList() {
+	projectCmd.AddCommand(projectListCmd)
+
+	projectListCmd.Flags().StringVarP(&prjList.name,
+		"name",
+		"n", "",
+		"The name of project.")
+	projectListCmd.Flags().StringVarP(&prjList.public,
+		"public",
+		"k", "",
+		"The project is public or private.")
+	projectListCmd.Flags().StringVarP(&prjList.owner,
+		"owner",
+		"o", "",
+		"The name of project owner.")
+	projectListCmd.Flags().Int64VarP(&prjList.page,
+		"page",
+		"p", 1,
+		"The page nubmer, default is 1.")
+	projectListCmd.Flags().Int64VarP(&prjList.pageSize,
+		"page_size",
+		"s", 10,
+		"The size of per page, default is 10, maximum is 100.")
 }
 
 var prjList struct {
@@ -291,16 +306,16 @@ var prjList struct {
 	// 2. If not in login state, it can obtain only public projects.
 	public   string
 	owner    string
-	page     int32
-	pageSize int32
+	page     int64
+	pageSize int64
 }
 
 func projectList() {
 	targetURL := projectURL + "?name=" + prjList.name +
 		"&public=" + prjList.public +
 		"&owner=" + prjList.owner +
-		"&page=" + strconv.FormatInt(int64(prjList.page), 10) +
-		"&page_size=" + strconv.FormatInt(int64(prjList.pageSize), 10)
+		"&page=" + strconv.FormatInt(prjList.page, 10) +
+		"&page_size=" + strconv.FormatInt(prjList.pageSize, 10)
 
 	utils.Get(targetURL)
 
