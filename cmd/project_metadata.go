@@ -45,6 +45,7 @@ func init() {
 	initMetadataAdd()
 	initMetadataDelete()
 	initMetadataGet()
+	initMetadataList()
 	initMetadataUpdate()
 }
 
@@ -158,8 +159,8 @@ func delProjectMetadata() {
 // getCmd represents the get command
 var getMetaCmd = &cobra.Command{
 	Use:   "get",
-	Short: "Get one specific metadata or all metadatas of a project.",
-	Long: `This endpoint returns one specific metadata or all metadatas of a project by project_id.
+	Short: "Get one specific metadata of a project.",
+	Long: `This endpoint returns one specific metadata of a project by project_id.
 
 NOTE: This endpoint can be used without cookie.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -184,15 +185,44 @@ func initMetadataGet() {
 	getMetaCmd.Flags().StringVarP(&prjMetaGet.metaName,
 		"meta_name",
 		"m", "",
-		"The name of a specific metadata.")
+		"(REQUIRED) The name of a specific metadata.")
+	getMetaCmd.MarkFlagRequired("meta_name")
 }
 
-// NOTE: Codes here support two APIs below
-// - GET /projects/{project_id}/metadatas
-// - GET /projects/{project_id}/metadatas/{meta_name}
 func getProjectMetadata() {
 	targetURL := projectURL + "/" + strconv.FormatInt(prjMetaGet.projectID, 10) +
 		"/metadatas/" + prjMetaGet.metaName
+	utils.Get(targetURL)
+}
+
+// getCmd represents the get command
+var listMetaCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List all metadatas of a project.",
+	Long: `This endpoint returns all metadatas of a project by project_id.
+
+NOTE: This endpoint can be used without cookie.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		listProjectMetadata()
+	},
+}
+
+var prjMetaList struct {
+	projectID int64
+}
+
+func initMetadataList() {
+	metadataCmd.AddCommand(listMetaCmd)
+
+	listMetaCmd.Flags().Int64VarP(&prjMetaList.projectID,
+		"project_id",
+		"j", 0,
+		"(REQUIRED) Project ID of project which will be get.")
+	listMetaCmd.MarkFlagRequired("project_id")
+}
+
+func listProjectMetadata() {
+	targetURL := projectURL + "/" + strconv.FormatInt(prjMetaList.projectID, 10) + "/metadatas"
 	utils.Get(targetURL)
 }
 
