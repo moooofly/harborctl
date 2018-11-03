@@ -53,6 +53,11 @@ func Put(targetURL string, body string) {
 		End(printStatus)
 }
 
+func Head(targetURL string) {
+	fmt.Println("==> HEAD", targetURL)
+	request.Head(targetURL).End(printStatus)
+}
+
 // printStatus is a regular simple output callback function.
 func printStatus(resp gorequest.Response, body string, errs []error) {
 	fmt.Println("<== ")

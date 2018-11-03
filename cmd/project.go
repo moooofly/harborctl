@@ -52,6 +52,7 @@ func init() {
 	initProjectCreate()
 	initProjectUpdate()
 	initProjectList()
+	initProjectCheck()
 }
 
 // projectGetCmd represents the get command
@@ -325,4 +326,33 @@ func projectList() {
 
 	// NOTE:
 	// If need, can obtain the total count of projects from Rsp Header by X-Total-Count
+}
+
+// projectCheckCmd represents the check command
+var projectCheckCmd = &cobra.Command{
+	Use:   "check",
+	Short: "Check if the project name user provided already exists.",
+	Long:  `This endpoint is used to check if the project name user provided already exist.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		projectCheck()
+	},
+}
+
+var prjCheck struct {
+	projectName string
+}
+
+func initProjectCheck() {
+	projectCmd.AddCommand(projectCheckCmd)
+
+	projectCheckCmd.Flags().StringVarP(&prjCheck.projectName,
+		"project_name",
+		"n", "",
+		"(REQUIRED) Project name for checking exists.")
+	projectCheckCmd.MarkFlagRequired("project_name")
+}
+
+func projectCheck() {
+	targetURL := projectURL + "?project_name=" + prjCheck.projectName
+	utils.Head(targetURL)
 }
