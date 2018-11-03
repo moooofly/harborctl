@@ -332,7 +332,9 @@ func projectList() {
 var projectCheckCmd = &cobra.Command{
 	Use:   "check",
 	Short: "Check if the project name user provided already exists.",
-	Long:  `This endpoint is used to check if the project name user provided already exist.`,
+	Long: `This endpoint is used to check if the project name user provided already exist.
+
+NOTE: This endpoint can be used without cookie.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		projectCheck()
 	},
