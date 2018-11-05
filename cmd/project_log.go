@@ -21,26 +21,25 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
 	"strconv"
 
 	"github.com/moooofly/harborctl/utils"
 	"github.com/spf13/cobra"
 )
 
-// logCmd represents the log command
-var logCmd = &cobra.Command{
+// projectLogCmd represents the log command
+var projectLogCmd = &cobra.Command{
 	Use:   "log",
-	Short: "Get recent logs of the projects which the user is a member of.",
-	Long:  `This endpoint let user see the recent operation logs of the projects which he is member of.`,
+	Short: "Get access logs accompany with a relevant project.",
+	Long:  `This endpoint let user search access logs filtered by operations and date time ranges.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		getLog()
+		getProjectLog()
 	},
 }
 
-// NOTE: This API has a related issue (https://github.com/moooofly/harborctl/issues/6)
-var log struct {
+// NOTE: This API has a related issue (https://github.com/moooofly/harborctl/issues/2)
+var prjLog struct {
+	projectID      int64
 	username       string
 	repository     string
 	tag            string
@@ -52,66 +51,64 @@ var log struct {
 }
 
 func init() {
-	rootCmd.AddCommand(logCmd)
+	projectCmd.AddCommand(projectLogCmd)
 
-	logCmd.Flags().StringVarP(&log.username,
+	projectLogCmd.Flags().Int64VarP(&prjLog.projectID,
+		"project_id",
+		"j", 0,
+		"(REQUIRED) Relevant project ID.")
+	projectLogCmd.MarkFlagRequired("project_id")
+
+	projectLogCmd.Flags().StringVarP(&prjLog.username,
 		"username",
 		"n", "",
 		"Username of the operator.")
 
-	logCmd.Flags().StringVarP(&log.repository,
+	projectLogCmd.Flags().StringVarP(&prjLog.repository,
 		"repository",
 		"r", "",
 		"The name of repository.")
 
-	logCmd.Flags().StringVarP(&log.tag,
+	projectLogCmd.Flags().StringVarP(&prjLog.tag,
 		"tag",
 		"t", "",
 		"The name of tag.")
 
-	logCmd.Flags().StringVarP(&log.operation,
+	projectLogCmd.Flags().StringVarP(&prjLog.operation,
 		"operation",
 		"o", "",
 		"The operation.")
 
-	logCmd.Flags().StringVarP(&log.beginTimestamp,
+	projectLogCmd.Flags().StringVarP(&prjLog.beginTimestamp,
 		"beginTimestamp",
 		"b", "",
-		"The begin timestamp (format: yyyymmdd).")
+		"The begin timestamp (format is unknown).")
 
-	logCmd.Flags().StringVarP(&log.endTimestamp,
+	projectLogCmd.Flags().StringVarP(&prjLog.endTimestamp,
 		"endTimestamp",
 		"e", "",
-		"The end timestamp (format: yyyymmdd).")
+		"The end timestamp (format is unknown).")
 
-	logCmd.Flags().Int64VarP(&log.page,
+	projectLogCmd.Flags().Int64VarP(&prjLog.page,
 		"page",
 		"p", 1,
 		"The page nubmer, default is 1.")
-	logCmd.Flags().Int64VarP(&log.pageSize,
+	projectLogCmd.Flags().Int64VarP(&prjLog.pageSize,
 		"page_size",
 		"s", 10,
 		"The size of per page, default is 10, maximum is 100.")
 }
 
-func getLog() {
-	if log.operation != "" &&
-		log.operation != "create" &&
-		log.operation != "delete" &&
-		log.operation != "push" &&
-		log.operation != "pull" {
-		fmt.Println("error: operation must be one of [create|delete|push|pull]")
-		os.Exit(1)
-	}
-
-	targetURL := utils.URLGen("/api/logs") + "?username=" + log.username +
-		"&repository=" + log.repository +
-		"&tag=" + log.tag +
-		"&operation=" + log.operation +
-		"&begin_timestamp=" + log.beginTimestamp +
-		"&end_timestamp=" + log.endTimestamp +
-		"&page=" + strconv.FormatInt(log.page, 10) +
-		"&page_size=" + strconv.FormatInt(log.pageSize, 10)
+func getProjectLog() {
+	targetURL := projectURL + "/" + strconv.FormatInt(prjLog.projectID, 10) +
+		"/logs" + "?username=" + prjLog.username +
+		"&repository=" + prjLog.repository +
+		"&tag=" + prjLog.tag +
+		"&operation=" + prjLog.operation +
+		"&begin_timestamp=" + prjLog.beginTimestamp +
+		"&end_timestamp=" + prjLog.endTimestamp +
+		"&page=" + strconv.FormatInt(prjLog.page, 10) +
+		"&page_size=" + strconv.FormatInt(prjLog.pageSize, 10)
 
 	utils.Get(targetURL)
 }
