@@ -47,7 +47,7 @@ func init() {
 
 	signatureCmd.Flags().StringVarP(&repoSignature.repoName,
 		"repo_name",
-		"n", "",
+		"r", "",
 		"(REQUIRED) The name of repository for which to get signature.")
 	signatureCmd.MarkFlagRequired("repo_name")
 }

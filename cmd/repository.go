@@ -35,7 +35,7 @@ var repositoryURL string
 var repositoryCmd = &cobra.Command{
 	Use:   "repository",
 	Short: "'/repositories' API.",
-	Long:  `The subcommand of '/repositoriesj' hierachy.`,
+	Long:  `The subcommand of '/repositories' hierachy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		repositoryURL = utils.URLGen("/api/repositories")
 	},
@@ -145,7 +145,7 @@ func initRepoDelete() {
 
 	repoDeleteCmd.Flags().StringVarP(&repoDelete.repoName,
 		"repo_name",
-		"n", "",
+		"r", "",
 		"(REQUIRED) The name of repository which will be deleted.")
 	repoDeleteCmd.MarkFlagRequired("repo_name")
 }
@@ -176,7 +176,7 @@ func initRepoUpdate() {
 
 	repoUpdateCmd.Flags().StringVarP(&repoUpdate.repoName,
 		"repo_name",
-		"n", "",
+		"r", "",
 		"(REQUIRED) The name of repository which will be updated.")
 	repoUpdateCmd.MarkFlagRequired("repo_name")
 
