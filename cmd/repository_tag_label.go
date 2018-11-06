@@ -51,7 +51,10 @@ func init() {
 var tagLabelAddCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add a label to the image under specific repository.",
-	Long:  `This endpoint adds a label to the image under specific repository.`,
+	Long: `This endpoint adds a label to the image under specific repository.
+
+WARNING:
+- '--deleted' should not be used unless knowing what you are doing`,
 	Run: func(cmd *cobra.Command, args []string) {
 		addImageLabel()
 	},
@@ -132,7 +135,7 @@ func initRepoTagLabelAdd() {
 	tagLabelAddCmd.Flags().BoolVarP(&repoTagLabelAdd.Deleted,
 		"deleted",
 		"", false,
-		"The label is deleted or not.")
+		"Mark the label is deleted or not.")
 }
 
 func addImageLabel() {
