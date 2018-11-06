@@ -29,8 +29,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// labelCmd represents the label command
-var labelCmd = &cobra.Command{
+// repoLabelCmd represents the label command
+var repoLabelCmd = &cobra.Command{
 	Use:   "label",
 	Short: "'/repositories/{repo_name}/labels' API.",
 	Long:  `The subcommand of '/repositories/{repo_name}/labels' hierachy.`,
@@ -40,7 +40,7 @@ var labelCmd = &cobra.Command{
 }
 
 func init() {
-	repositoryCmd.AddCommand(labelCmd)
+	repositoryCmd.AddCommand(repoLabelCmd)
 
 	initRepoLabelAdd()
 	initRepoLabelDelete()
@@ -57,6 +57,7 @@ var labelAddCmd = &cobra.Command{
 	},
 }
 
+// NOTE: there is a related issue (https://github.com/moooofly/harborctl/issues/20)
 var repoLabelAdd struct {
 	repoName string
 
@@ -73,12 +74,12 @@ var repoLabelAdd struct {
 }
 
 func initRepoLabelAdd() {
-	labelCmd.AddCommand(labelAddCmd)
+	repoLabelCmd.AddCommand(labelAddCmd)
 
 	labelAddCmd.Flags().StringVarP(&repoLabelAdd.repoName,
 		"repo_name",
 		"r", "",
-		"(REQUIRED) The name of repository that you want to add a label")
+		"(REQUIRED) The name of repository that you want to add a label.")
 	labelAddCmd.MarkFlagRequired("repo_name")
 
 	labelAddCmd.Flags().Int64VarP(&repoLabelAdd.ID,
@@ -155,7 +156,7 @@ var repoLabelDelete struct {
 }
 
 func initRepoLabelDelete() {
-	labelCmd.AddCommand(labelDeleteCmd)
+	repoLabelCmd.AddCommand(labelDeleteCmd)
 
 	labelDeleteCmd.Flags().StringVarP(&repoLabelDelete.repoName,
 		"repo_name",
@@ -191,7 +192,7 @@ var repoLabelGet struct {
 }
 
 func initRepoLabelGet() {
-	labelCmd.AddCommand(labelGetCmd)
+	repoLabelCmd.AddCommand(labelGetCmd)
 
 	labelGetCmd.Flags().StringVarP(&repoLabelGet.repoName,
 		"repo_name",
