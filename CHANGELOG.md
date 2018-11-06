@@ -1,3 +1,15 @@
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/moooofly/harborctl/compare/v0.3.0...v0.4.0) (2018-11-06)
+
+
+### Features
+
+* **repository-api:** add "/repositories/{repo_name}/tags/{tag}/labels" APIs ([091556f](https://github.com/moooofly/harborctl/commit/091556f))
+* **repository-api:** add get/delete/list "/repositories/{repo_name}/tags" APIs ([58113ba](https://github.com/moooofly/harborctl/commit/58113ba))
+* **repository-api:** add manifest/retag/scan/vulnerability "/repositories/{repo_name}/tags" APIs ([8fce3b4](https://github.com/moooofly/harborctl/commit/8fce3b4))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/moooofly/harborctl/compare/v0.2.0...v0.3.0) (2018-11-05)
 
