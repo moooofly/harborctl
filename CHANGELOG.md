@@ -1,3 +1,14 @@
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/moooofly/harborctl/compare/v0.4.0...v0.5.0) (2018-11-06)
+
+
+### Features
+
+* **label-api:** add "/labels/{id}/resources" API ([1937d5a](https://github.com/moooofly/harborctl/commit/1937d5a))
+* **label-api:** add list/create/get/update/delete "/labels" APIs ([619406a](https://github.com/moooofly/harborctl/commit/619406a))
+
+
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/moooofly/harborctl/compare/v0.3.0...v0.4.0) (2018-11-06)
 
