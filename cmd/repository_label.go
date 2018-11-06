@@ -47,11 +47,14 @@ func init() {
 	initRepoLabelGet()
 }
 
-// labelAddCmd represents the add command
-var labelAddCmd = &cobra.Command{
+// repoLabelAddCmd represents the add command
+var repoLabelAddCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add a label to the repository.",
-	Long:  `This endpoint adds an already existing label (global or project specific) to the repository.`,
+	Long: `This endpoint adds an already existing label (global or project specific) to the repository.
+
+WARNING:
+- '--deleted' should not be used unless knowing what you are doing`,
 	Run: func(cmd *cobra.Command, args []string) {
 		addRepoLabel()
 	},
@@ -74,58 +77,59 @@ var repoLabelAdd struct {
 }
 
 func initRepoLabelAdd() {
-	repoLabelCmd.AddCommand(labelAddCmd)
+	repoLabelCmd.AddCommand(repoLabelAddCmd)
 
-	labelAddCmd.Flags().StringVarP(&repoLabelAdd.repoName,
+	repoLabelAddCmd.Flags().StringVarP(&repoLabelAdd.repoName,
 		"repo_name",
 		"r", "",
 		"(REQUIRED) The name of repository that you want to add a label.")
-	labelAddCmd.MarkFlagRequired("repo_name")
+	repoLabelAddCmd.MarkFlagRequired("repo_name")
 
-	labelAddCmd.Flags().Int64VarP(&repoLabelAdd.ID,
+	repoLabelAddCmd.Flags().Int64VarP(&repoLabelAdd.ID,
 		"id",
 		"i", 0,
 		"(REQUIRED) The ID of the already existing label.")
-	labelAddCmd.MarkFlagRequired("id")
+	repoLabelAddCmd.MarkFlagRequired("id")
 
-	labelAddCmd.Flags().StringVarP(&repoLabelAdd.Name,
+	repoLabelAddCmd.Flags().StringVarP(&repoLabelAdd.Name,
 		"name",
 		"n", "",
 		"The name of this label.")
 
-	labelAddCmd.Flags().StringVarP(&repoLabelAdd.Description,
+	repoLabelAddCmd.Flags().StringVarP(&repoLabelAdd.Description,
 		"description",
 		"d", "",
 		"The description of this label.")
 
-	labelAddCmd.Flags().StringVarP(&repoLabelAdd.Color,
+	repoLabelAddCmd.Flags().StringVarP(&repoLabelAdd.Color,
 		"color",
 		"c", "",
 		"The color code of this label. (e.g. Format: #A9B6BE)")
 
-	labelAddCmd.Flags().StringVarP(&repoLabelAdd.Scope,
+	repoLabelAddCmd.Flags().StringVarP(&repoLabelAdd.Scope,
 		"scope",
 		"s", "",
 		"The scope of this label. ('p' for project scope, 'g' for global scope)")
 
-	labelAddCmd.Flags().Int64VarP(&repoLabelAdd.ProjectID,
+	repoLabelAddCmd.Flags().Int64VarP(&repoLabelAdd.ProjectID,
 		"project_id",
 		"j", 0,
 		"The project ID if the label is a project label. ('0' indicates global label, others indicate specific project)")
 
-	labelAddCmd.Flags().StringVarP(&repoLabelAdd.CreationTime,
+	repoLabelAddCmd.Flags().StringVarP(&repoLabelAdd.CreationTime,
 		"creation_time",
 		"", "",
 		"The creation time of this label.")
-	labelAddCmd.Flags().StringVarP(&repoLabelAdd.UpdateTime,
+
+	repoLabelAddCmd.Flags().StringVarP(&repoLabelAdd.UpdateTime,
 		"update_time",
 		"", "",
 		"The update time of this label.")
 
-	labelAddCmd.Flags().BoolVarP(&repoLabelAdd.Deleted,
+	repoLabelAddCmd.Flags().BoolVarP(&repoLabelAdd.Deleted,
 		"deleted",
 		"", false,
-		"The label is deleted or not.")
+		"Mark the label is deleted or not.")
 }
 
 func addRepoLabel() {
@@ -140,8 +144,8 @@ func addRepoLabel() {
 	utils.Post(targetURL, string(p))
 }
 
-// labelDeleteCmd represents the delete command
-var labelDeleteCmd = &cobra.Command{
+// repoLabelDeleteCmd represents the delete command
+var repoLabelDeleteCmd = &cobra.Command{
 	Use:   "delete",
 	Short: "Delete a label from the repository.",
 	Long:  `Delete the label from the repository specified by the repo_name.`,
@@ -156,19 +160,19 @@ var repoLabelDelete struct {
 }
 
 func initRepoLabelDelete() {
-	repoLabelCmd.AddCommand(labelDeleteCmd)
+	repoLabelCmd.AddCommand(repoLabelDeleteCmd)
 
-	labelDeleteCmd.Flags().StringVarP(&repoLabelDelete.repoName,
+	repoLabelDeleteCmd.Flags().StringVarP(&repoLabelDelete.repoName,
 		"repo_name",
 		"r", "",
 		"(REQUIRED) The name of repository.")
-	labelDeleteCmd.MarkFlagRequired("repo_name")
+	repoLabelDeleteCmd.MarkFlagRequired("repo_name")
 
-	labelDeleteCmd.Flags().Int64VarP(&repoLabelDelete.labelID,
+	repoLabelDeleteCmd.Flags().Int64VarP(&repoLabelDelete.labelID,
 		"label_id",
 		"l", 0,
 		"(REQUIRED) The ID of label.")
-	labelDeleteCmd.MarkFlagRequired("label_id")
+	repoLabelDeleteCmd.MarkFlagRequired("label_id")
 }
 
 func deleteRepoLabel() {
@@ -177,8 +181,8 @@ func deleteRepoLabel() {
 	utils.Delete(targetURL)
 }
 
-// labelGetCmd represents the get command
-var labelGetCmd = &cobra.Command{
+// repoLabelGetCmd represents the get command
+var repoLabelGetCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Get labels of a repository.",
 	Long:  `Get labels of a repository specified by the repo_name.`,
@@ -192,13 +196,13 @@ var repoLabelGet struct {
 }
 
 func initRepoLabelGet() {
-	repoLabelCmd.AddCommand(labelGetCmd)
+	repoLabelCmd.AddCommand(repoLabelGetCmd)
 
-	labelGetCmd.Flags().StringVarP(&repoLabelGet.repoName,
+	repoLabelGetCmd.Flags().StringVarP(&repoLabelGet.repoName,
 		"repo_name",
 		"r", "",
 		"(REQUIRED) The name of repository.")
-	labelGetCmd.MarkFlagRequired("repo_name")
+	repoLabelGetCmd.MarkFlagRequired("repo_name")
 }
 
 func getRepoLabel() {
