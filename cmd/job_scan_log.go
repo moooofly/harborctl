@@ -21,27 +21,38 @@
 package cmd
 
 import (
-	"fmt"
+	"strconv"
 
 	"github.com/moooofly/harborctl/utils"
 	"github.com/spf13/cobra"
 )
 
-var jobURL string
-
-// jobCmd represents the job command
-var jobCmd = &cobra.Command{
-	Use:   "job",
-	Short: "'/jobs' API.",
-	Long:  `The subcommand of '/jobs' hierachy.`,
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		jobURL = utils.URLGen("/api/jobs")
-	},
+// jobScanLogCmd represents the log command
+var jobScanLogCmd = &cobra.Command{
+	Use:   "log",
+	Short: "Get scan job logs by specific job ID.",
+	Long:  `This endpoint let user get scan job logs filtered by specific job ID.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Use \"harborctl job --help\" for more information about this command.")
+		getJobScanLog()
 	},
 }
 
+// NOTE: there is a related issue (https://github.com/moooofly/harborctl/issues/29)
+var jobScanLog struct {
+	ID int64
+}
+
 func init() {
-	rootCmd.AddCommand(jobCmd)
+	scanCmd.AddCommand(jobScanLogCmd)
+
+	jobScanLogCmd.Flags().Int64VarP(&jobScanLog.ID,
+		"id",
+		"i", 0,
+		"(REQUIRED) The ID of the scan job.")
+	jobScanLogCmd.MarkFlagRequired("id")
+}
+
+func getJobScanLog() {
+	targetURL := jobURL + "/scan/" + strconv.FormatInt(jobScanLog.ID, 10) + "/log"
+	utils.Get(targetURL)
 }
