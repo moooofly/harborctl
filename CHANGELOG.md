@@ -1,3 +1,16 @@
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/moooofly/harborctl/compare/v0.5.0...v0.6.0) (2018-11-07)
+
+
+### Features
+
+* **internal-api:** add "/internal/syncregistry" API ([6ac806e](https://github.com/moooofly/harborctl/commit/6ac806e))
+* **job-api:** add "/jobs/replication" APIs ([1a13448](https://github.com/moooofly/harborctl/commit/1a13448))
+* **job-api:** add "/jobs/scan/{id}/log" API ([24a9782](https://github.com/moooofly/harborctl/commit/24a9782))
+* **systeminfo-api:** add "/systeminfo" APIs ([306cbc5](https://github.com/moooofly/harborctl/commit/306cbc5))
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/moooofly/harborctl/compare/v0.4.0...v0.5.0) (2018-11-06)
 
