@@ -1,3 +1,16 @@
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/moooofly/harborctl/compare/v0.6.0...v0.7.0) (2018-11-08)
+
+
+### Features
+
+* **policy-api:** add "/policies/replication" APIs ([70fd9aa](https://github.com/moooofly/harborctl/commit/70fd9aa))
+* **replication-api:** add "POST /replications" API ([1f81e4b](https://github.com/moooofly/harborctl/commit/1f81e4b))
+* **target-api:** add "/targets" APIs ([56d6054](https://github.com/moooofly/harborctl/commit/56d6054))
+* **target-api:** add "/targets/ping" and "/targets/{id}/policies" APIs ([c67f2c1](https://github.com/moooofly/harborctl/commit/c67f2c1))
+
+
+
 <a name="0.6.0"></a>
 # [0.6.0](https://github.com/moooofly/harborctl/compare/v0.5.0...v0.6.0) (2018-11-07)
 
