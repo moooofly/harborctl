@@ -3,4 +3,4 @@
 
 scheme: https
 # specify harbor endpoint address
-target: localhost
+address: localhost

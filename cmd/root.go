@@ -30,6 +30,7 @@ import (
 )
 
 var cfgFile string
+var address string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -61,6 +62,9 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	rootCmd.PersistentFlags().StringVarP(&address, "address", "", "localhost", "The address of target endpoint.")
+	viper.BindPFlag("address", rootCmd.PersistentFlags().Lookup("address"))
 }
 
 // initConfig reads in config file and ENV variables if set.
