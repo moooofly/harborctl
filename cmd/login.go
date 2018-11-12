@@ -57,6 +57,7 @@ func init() {
 
 	loginCmd.Flags().StringVarP(&li.username, "username", "u", "", "(REQUIRED) Current login username.")
 	loginCmd.MarkFlagRequired("username")
+
 	loginCmd.Flags().StringVarP(&li.password, "password", "p", "", "Current user login password.")
 
 	// TODO(mooofly): add `address` flag to overide config from .harborctl.yaml

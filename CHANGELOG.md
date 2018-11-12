@@ -1,3 +1,14 @@
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/moooofly/harborctl/compare/v0.7.0...v0.8.0) (2018-11-12)
+
+
+### Features
+
+* support user specified target address ([d843dc4](https://github.com/moooofly/harborctl/commit/d843dc4))
+* **tool:** add a tool for sync status check ([95de12f](https://github.com/moooofly/harborctl/commit/95de12f))
+
+
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/moooofly/harborctl/compare/v0.6.0...v0.7.0) (2018-11-08)
 
