@@ -29,7 +29,9 @@ import (
 var manifestCmd = &cobra.Command{
 	Use:   "manifest",
 	Short: "Get manifests of a relevant repository.",
-	Long:  `This endpoint aims to retrieve manifests from a relevant repository.`,
+	Long: `This endpoint aims to retrieve manifests from a relevant repository.
+
+NOTE: This endpoint can be used without cookie.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		getRepoTagManifest()
 	},
