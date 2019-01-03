@@ -21,27 +21,37 @@
 package cmd
 
 import (
-	"fmt"
+	"strconv"
 
 	"github.com/moooofly/harborctl/utils"
 	"github.com/spf13/cobra"
 )
 
-var jobURL string
-
-// jobCmd represents the job command
-var jobCmd = &cobra.Command{
-	Use:   "job",
-	Short: "'/jobs' API.",
-	Long:  `The subcommand of '/jobs' hierachy.`,
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		jobURL = utils.URLGen("/api/jobs")
-	},
+// jobReplicationLogCmd represents the log command
+var jobReplicationLogCmd = &cobra.Command{
+	Use:   "log",
+	Short: "Get job replication logs.",
+	Long:  `This endpoint let user search job replicaiton logs filtered by job ID.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Use \"harborctl job --help\" for more information about this command.")
+		getJobReplicationLog()
 	},
 }
 
+var jobReplicationLog struct {
+	ID int64
+}
+
 func init() {
-	rootCmd.AddCommand(jobCmd)
+	replicationCmd.AddCommand(jobReplicationLogCmd)
+
+	jobReplicationLogCmd.Flags().Int64VarP(&jobReplicationLog.ID,
+		"id",
+		"i", 0,
+		"(REQUIRED) The ID of the job replication.")
+	jobReplicationLogCmd.MarkFlagRequired("id")
+}
+
+func getJobReplicationLog() {
+	targetURL := jobURL + "/replication/" + strconv.FormatInt(jobReplicationLog.ID, 10) + "/log"
+	utils.Get(targetURL)
 }

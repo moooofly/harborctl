@@ -27,21 +27,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var policyURL string
-
-// policyCmd represents the policy command
-var policyCmd = &cobra.Command{
-	Use:   "policy",
-	Short: "'/policies' API.",
-	Long:  `The subcommand of '/policies' hierachy.`,
+// scanCmd represents the scan command
+var scanCmd = &cobra.Command{
+	Use:   "scan",
+	Short: "'/jobs/scan' API.",
+	Long:  `The subcommand of '/jobs/scan' hierachy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		policyURL = utils.URLGen("/api/policies")
+		jobURL = utils.URLGen("/api/jobs")
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Use \"harborctl policy --help\" for more information about this command.")
+		fmt.Println("Use \"harborctl scan --help\" for more information about this command.")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(policyCmd)
+	rootCmd.AddCommand(scanCmd)
 }
