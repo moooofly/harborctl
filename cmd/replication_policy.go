@@ -29,18 +29,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var policyURL string
+
 // policyReplicationCmd represents the replication command
 var policyReplicationCmd = &cobra.Command{
-	Use:   "replication",
+	Use:   "policy",
 	Short: "'/policies/replication' API.",
 	Long:  `The subcommand of '/policies/replication' hierachy.`,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		policyURL = utils.URLGen("/api/policies")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Use \"harborctl policy replication --help\" for more information about this command.")
+		fmt.Println("Use \"harborctl replication policy --help\" for more information about this command.")
 	},
 }
 
 func init() {
-	policyCmd.AddCommand(policyReplicationCmd)
+	replicationCmd.AddCommand(policyReplicationCmd)
 
 	initPolicyList()
 	initPolicyGet()
