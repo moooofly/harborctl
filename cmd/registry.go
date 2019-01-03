@@ -33,14 +33,14 @@ var targetsURL string
 
 // targetCmd represents the target command
 var targetCmd = &cobra.Command{
-	Use:   "target",
+	Use:   "registry",
 	Short: "'/targets' API.",
 	Long:  `The subcommand of '/targets' hierachy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		targetsURL = utils.URLGen("/api/targets")
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Use \"harborctl target --help\" for more information about this command.")
+		fmt.Println("Use \"harborctl registry --help\" for more information about this command.")
 	},
 }
 
