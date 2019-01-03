@@ -1,3 +1,11 @@
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/moooofly/harborctl/compare/v0.8.0...v0.9.0) (2019-01-03)
+
+
+* **target-api:** rename cmd name from 'target' to 'registry' ([72103c5](https://github.com/moooofly/harborctl/commit/72103c5))
+* **tool:** remove complicated cmd tools out of base release, related to #12 and #5 ([f4f1c25](https://github.com/moooofly/harborctl/commit/f4f1c25))
+
+
 <a name="0.8.0"></a>
 # [0.8.0](https://github.com/moooofly/harborctl/compare/v0.7.0...v0.8.0) (2018-11-12)
 

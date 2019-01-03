@@ -53,7 +53,8 @@ var tagGetCmd = &cobra.Command{
 
 NOTE:
 - If deployed with Notary, the 'signature' within response represents whether the image is singed or not.
-- If the value of 'signature' is null, the image is unsigned.`,
+- If the value of 'signature' is null, the image is unsigned.
+- This endpoint can be used without cookie.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		getRepoTag()
 	},
