@@ -27,21 +27,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var jobURL string
-
-// jobCmd represents the job command
-var jobCmd = &cobra.Command{
-	Use:   "job",
-	Short: "'/jobs' API.",
-	Long:  `The subcommand of '/jobs' hierachy.`,
+// scanCmd represents the scan command
+var scanCmd = &cobra.Command{
+	Use:   "scan",
+	Short: "'/jobs/scan' API.",
+	Long:  `The subcommand of '/jobs/scan' hierachy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		jobURL = utils.URLGen("/api/jobs")
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Use \"harborctl job --help\" for more information about this command.")
+		fmt.Println("Use \"harborctl scan --help\" for more information about this command.")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(jobCmd)
+	rootCmd.AddCommand(scanCmd)
 }

@@ -21,21 +21,45 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 
+	"github.com/moooofly/harborctl/utils"
 	"github.com/spf13/cobra"
 )
 
-// scanCmd represents the scan command
-var scanCmd = &cobra.Command{
-	Use:   "scan",
-	Short: "'/jobs/scan' API.",
-	Long:  `The subcommand of '/jobs/scan' hierachy.`,
+// triggerCmd represents the trigger command
+var triggerCmd = &cobra.Command{
+	Use:   "trigger",
+	Short: "Trigger the replication by the specified policy ID.",
+	Long:  `This endpoint is used to trigger a replication by the specified policy ID.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Use \"harborctl job scan --help\" for more information about this command.")
+		trigger()
 	},
 }
 
+var replicationTrigger struct {
+	PolicyID int64 `json:"policy_id"`
+}
+
 func init() {
-	jobCmd.AddCommand(scanCmd)
+	replicationCmd.AddCommand(triggerCmd)
+
+	triggerCmd.Flags().Int64VarP(&replicationTrigger.PolicyID,
+		"policy_id",
+		"i", 0,
+		"(REQUIRED) The ID of replication policy.")
+	triggerCmd.MarkFlagRequired("policy_id")
+}
+
+func trigger() {
+	targetURL := replicationURL
+
+	p, err := json.Marshal(&replicationTrigger)
+	if err != nil {
+		fmt.Println("err:", err)
+		return
+	}
+
+	utils.Post(targetURL, string(p))
 }

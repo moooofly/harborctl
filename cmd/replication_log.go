@@ -42,7 +42,7 @@ var jobReplicationLog struct {
 }
 
 func init() {
-	jobReplicationCmd.AddCommand(jobReplicationLogCmd)
+	replicationCmd.AddCommand(jobReplicationLogCmd)
 
 	jobReplicationLogCmd.Flags().Int64VarP(&jobReplicationLog.ID,
 		"id",
