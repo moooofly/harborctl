@@ -1,6 +1,6 @@
 # customize
 
-conf/.cookie.yaml
+conf/*.yaml
 harborctl*
 *.tar.gz
 
