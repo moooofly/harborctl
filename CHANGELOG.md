@@ -1,3 +1,14 @@
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/moooofly/harborctl/compare/v0.9.0...v0.10.0) (2019-01-03)
+
+
+### Features
+
+* **policy-api:** refactor hierarchy between policy and replication as per [#41](https://github.com/moooofly/harborctl/issues/41) ([8d7177a](https://github.com/moooofly/harborctl/commit/8d7177a))
+* **replication-api:** refactor replication related APIs hierarchy ([9415e78](https://github.com/moooofly/harborctl/commit/9415e78))
+
+
+
 <a name="0.9.0"></a>
 # [0.9.0](https://github.com/moooofly/harborctl/compare/v0.8.0...v0.9.0) (2019-01-03)
 
