@@ -1,3 +1,13 @@
+<a name="0.11.0"></a>
+# [0.11.0](https://github.com/moooofly/harborctl/compare/v0.10.0...v0.11.0) (2019-01-23)
+
+
+### Features
+
+* **usergroup-api:** add "/usergroups" APIs ([b56f78b](https://github.com/moooofly/harborctl/commit/b56f78b))
+
+
+
 <a name="0.10.0"></a>
 # [0.10.0](https://github.com/moooofly/harborctl/compare/v0.9.0...v0.10.0) (2019-01-03)
 
