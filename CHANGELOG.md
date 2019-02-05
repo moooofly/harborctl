@@ -1,3 +1,13 @@
+<a name="0.12.0"></a>
+# [0.12.0](https://github.com/moooofly/harborctl/compare/v0.11.0...v0.12.0) (2019-02-05)
+
+
+### Features
+
+* **chartrepo-api:** add "/chartrepo" APIs ([2ad9d4d](https://github.com/moooofly/harborctl/commit/2ad9d4d))
+
+
+
 <a name="0.11.0"></a>
 # [0.11.0](https://github.com/moooofly/harborctl/compare/v0.10.0...v0.11.0) (2019-01-23)
 
