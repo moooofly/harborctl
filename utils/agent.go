@@ -43,6 +43,30 @@ func Post(targetURL string, body string) {
 		End(printStatus)
 }
 
+func Multipart(targetURL string, files ...string) {
+	fmt.Println("==> POST (Multipart)", targetURL)
+
+	c, _ := CookieLoad()
+	switch len(files) {
+	case 1:
+		request.Post(targetURL).
+			Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c).
+			Type(gorequest.TypeMultipart).
+			SendFile(files[0]).
+			End(printStatus)
+	case 2:
+		request.Post(targetURL).
+			Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c).
+			Type(gorequest.TypeMultipart).
+			SendFile(files[0]).
+			SendFile(files[1]).
+			End(printStatus)
+	default:
+		fmt.Println("Should not be here!")
+		return
+	}
+}
+
 func Put(targetURL string, body string) {
 	fmt.Println("==> PUT", targetURL)
 
