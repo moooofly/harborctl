@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/moooofly/harbor-go-client/utils/term"
+	"github.com/moooofly/harborctl/utils/term"
 )
 
 func readInput(in io.Reader, out io.Writer) string {
