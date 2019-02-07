@@ -25,6 +25,7 @@ import (
 	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/moooofly/harborctl/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -37,6 +38,16 @@ var rootCmd = &cobra.Command{
 	Use:   "harborctl",
 	Short: "A CLI tool for the Docker Registry Harbor.",
 	Long:  `This project offer a command-line interface to the Harbor API, you can use it to manager your users, projects, repositories, etc.`,
+	Version: fmt.Sprintf("%s\n%s\n| % -20s | % -40s |\n| % -20s | % -40s |\n| % -20s | % -40s |\n| % -20s | % -40s |\n| % -20s | % -40s |\n| % -20s | % -40s |\n%s\n",
+		utils.Logo,
+		utils.Mark,
+		"Client Version", utils.ClientVersion,
+		"Go Version", utils.GoVersion,
+		"UTC Build Time", utils.UTCBuildTime,
+		"Git Branch", utils.GitBranch,
+		"Git Tag", utils.GitTag,
+		"Git Hash", utils.GitHash,
+		utils.Mark),
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
@@ -57,14 +68,14 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
+	rootCmd.PersistentFlags().StringVarP(&address, "address", "", "localhost", "The address of target endpoint.")
+	viper.BindPFlag("address", rootCmd.PersistentFlags().Lookup("address"))
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/, working dir (.), and ./conf dir)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
-	rootCmd.PersistentFlags().StringVarP(&address, "address", "", "localhost", "The address of target endpoint.")
-	viper.BindPFlag("address", rootCmd.PersistentFlags().Lookup("address"))
+	rootCmd.Flags().BoolP("version", "v", false, "Print version information and quit.")
+	rootCmd.SetVersionTemplate(`{{printf "%s\n" .Version}}`)
 }
 
 // initConfig reads in config file and ENV variables if set.

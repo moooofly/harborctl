@@ -1,3 +1,14 @@
+<a name="0.13.0"></a>
+# [0.13.0](https://github.com/moooofly/harborctl/compare/v0.12.0...v0.13.0) (2019-02-07)
+
+
+### Features
+
+* add .travis.yml and Makefile ([fc47fb7](https://github.com/moooofly/harborctl/commit/fc47fb7))
+* add version subcommand ([2d2ba4b](https://github.com/moooofly/harborctl/commit/2d2ba4b))
+
+
+
 <a name="0.12.0"></a>
 # [0.12.0](https://github.com/moooofly/harborctl/compare/v0.11.0...v0.12.0) (2019-02-05)
 
