@@ -27,12 +27,12 @@ all: lint build test
 
 build:
 	@echo "==> Building ..."
-	$(GOBUILD) -o harborctl_${GOOS}_${GOARCH} -ldflags '$(LDFLAGS)' ./
+	$(GOBUILD) -o harborctl -ldflags '$(LDFLAGS)' .
 	@echo ""
 
 install:
 	@echo "==> Installing ..."
-	go install -x ${SRC}
+	go install -ldflags '$(LDFLAGS)' .
 	@echo ""
 
 lint:
@@ -55,10 +55,10 @@ deps:
 	@echo ""
 
 build_linux:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(BUILD_FLAG) -o harborctl_linux_amd64 -ldflags '$(LDFLAGS)' ./
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(BUILD_FLAG) -o harborctl_linux_amd64 -ldflags '$(LDFLAGS)' .
 
 build_darwin:
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build $(BUILD_FLAG) -o harborctl_darwin_amd64 -ldflags '$(LDFLAGS)' ./
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build $(BUILD_FLAG) -o harborctl_darwin_amd64 -ldflags '$(LDFLAGS)' .
 
 pack: build_linux build_darwin
 	@echo "==> Packing ..."
@@ -78,7 +78,7 @@ misspell:
 
 clean:
 	@echo "==> Cleaning ..."
-	go clean -x -i ${SRC}
+	go clean -x -i .
 	rm -f harborctl_*
 	rm -rf *.out
 	rm -rf *.tar.gz
