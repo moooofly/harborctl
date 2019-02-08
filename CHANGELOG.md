@@ -1,3 +1,19 @@
+<a name="0.14.0"></a>
+# [0.14.0](https://github.com/moooofly/harborctl/compare/v0.13.0...v0.14.0) (2019-02-08)
+
+
+### Bug Fixes
+
+* add ldflags to 'make install' for version output ([2a8c3cb](https://github.com/moooofly/harborctl/commit/2a8c3cb))
+* fix wrong reference ([548f459](https://github.com/moooofly/harborctl/commit/548f459))
+
+
+### Features
+
+* add command auto-completion support ([9ef1e1d](https://github.com/moooofly/harborctl/commit/9ef1e1d))
+
+
+
 <a name="0.13.0"></a>
 # [0.13.0](https://github.com/moooofly/harborctl/compare/v0.12.0...v0.13.0) (2019-02-07)
 
