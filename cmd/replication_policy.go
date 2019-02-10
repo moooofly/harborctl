@@ -24,6 +24,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/moooofly/harborctl/utils"
 	"github.com/spf13/cobra"
@@ -168,13 +169,13 @@ func deletePolicy() {
 var policyCreateCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a policy (replication rule).",
-	Long:  `This endpoint let user creates a policy (replication rule), and if it is enabled, the replication will be triggered right now.`,
+	Long:  `This endpoint let user create a policy (replication rule), and if it is enabled, the replication will be triggered right now.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		createPolicy()
 	},
 }
 
-// NOTE: there are related issues
+// NOTE: there are two related issues
 // - https://github.com/moooofly/harborctl/issues/30
 // - https://github.com/moooofly/harborctl/issues/31
 var policyCreate struct {
@@ -275,17 +276,29 @@ func initPolicyCreate() {
 		"The label IDs used as filter. NOTE: you can specify multiple label IDs seperated by comma.")
 }
 
-// TODO(moooofly): this API is too complicated, so fake it right now
 func createPolicy() {
 	targetURL := policyURL + "/replication"
 
+	type filter struct {
+		FilterKind string `json:"kind,omitempty"`
+
+		// NOTE: from Harbor UI, find that the type of 'value' can be either string or int
+		Value string `json:"value,omitempty"`
+
+		// NOTE: these two items are from swagger UI, but seems not being used in fact, remove later
+		//Pattern    string `json:"pattern,omitempty"`
+		//Metadata   struct {
+		//} `json:"metadata,omitempty"`
+	}
+
 	type policyInfo struct {
-		// TODO(moooofly): this parameter should not be included, remove this later
+		// TODO(moooofly): this parameter should not be included, remove later
 		// ID          int    `json:"id"`
+
 		Name        string `json:"name"`
 		Description string `json:"description"`
-		//Projects    []struct {
-		Projects struct {
+		// NOTE: per Harbor UI, only one project can be specified as source project each time.
+		Projects []struct {
 			ProjectID         int    `json:"project_id"`
 			OwnerID           int    `json:"owner_id"`
 			ProjectName       string `json:"name"`
@@ -305,8 +318,8 @@ func createPolicy() {
 				AutoScan           string `json:"auto_scan"`
 			} `json:"metadata"`
 		} `json:"projects"`
-		//Targets []struct {
-		Targets struct {
+		// NOTE: per Harbor UI, only one target can be specified as destination target each time.
+		Targets []struct {
 			ID           int    `json:"id"`
 			Endpoint     string `json:"endpoint"`
 			EndpointName string `json:"name"`
@@ -325,24 +338,68 @@ func createPolicy() {
 				Offtime int    `json:"offtime"`
 			} `json:"schedule_param"`
 		} `json:"trigger"`
-		Filters []struct {
-			FilterKind string `json:"kind"`
-			Value      string `json:"value"`
-			Pattern    string `json:"pattern"`
-			Metadata   struct {
-			} `json:"metadata"`
-		} `json:"filters"`
-		ReplicateExistingImageNow bool   `json:"replicate_existing_image_now"`
-		ReplicateDeletion         bool   `json:"replicate_deletion"`
-		CreationTime              string `json:"creation_time"`
-		UpdateTime                string `json:"update_time"`
-		ErrorJobCount             int    `json:"error_job_count"`
+
+		Filters []filter `json:"filters"`
+
+		ReplicateExistingImageNow bool `json:"replicate_existing_image_now"`
+		ReplicateDeletion         bool `json:"replicate_deletion"`
+
+		// TODO(moooofly): these three parameters should not be included, remove later
+		//CreationTime  string `json:"creation_time"`
+		//UpdateTime    string `json:"update_time"`
+		//ErrorJobCount int    `json:"error_job_count"`
 	}
 
+	// NOTE: Here are the main steps that Harbor UI does
+	//
+	// 1. By "GET /api/policies/replication?name=<xxx>" to check if replication rule with name <xxx> already exists
+	// 2. By "GET /api/projects?name=<yyy>" to get source project info to be replicated
+	// 3. By "GET /api/targets?name=<zzz>" to get endpoint info to replicate to
+	// 4. By "POST /api/policies/replication" to create replication rule based on above info and some other info
+
 	var pinfo policyInfo
+
+	// NOTE: not identify whether this replication rule exists or not by name, but it's ok, I think
 	pinfo.Name = policyCreate.replicationRuleName
-	pinfo.Projects.ProjectName = policyCreate.sourceProjectName
-	pinfo.Targets.EndpointName = policyCreate.endpointName
+
+	getSrcPrjURL := utils.URLGen("/api/projects") + "?name=" + policyCreate.sourceProjectName
+	utils.GetStruct(getSrcPrjURL, &pinfo.Projects)
+	//fmt.Println("pinfo.Project =>", pinfo.Projects)
+
+	getDstTargetURL := utils.URLGen("/api/targets") + "?name=" + policyCreate.endpointName
+	utils.GetStruct(getDstTargetURL, &pinfo.Targets)
+	//fmt.Println("pinfo.Targets =>", pinfo.Targets)
+
+	if policyCreate.filterByRepoName == "" && policyCreate.filterByTagName == "" && policyCreate.filterByLabelIDs == "" {
+		// FIXME: it seems that the value of "filters" after json.Marshal can either "null" or "[]"
+		//pinfo.Filters = make([]filter, 0)
+	} else {
+
+		if policyCreate.filterByRepoName != "" {
+			pinfo.Filters = append(pinfo.Filters, filter{
+				FilterKind: "repository",
+				Value:      policyCreate.filterByRepoName,
+			})
+		}
+
+		if policyCreate.filterByTagName != "" {
+			pinfo.Filters = append(pinfo.Filters, filter{
+				FilterKind: "tag",
+				Value:      policyCreate.filterByTagName,
+			})
+		}
+
+		// NOTE: there is a related issue https://github.com/moooofly/harborctl/issues/30#issuecomment-462120209
+		if policyCreate.filterByLabelIDs != "" {
+			ids := strings.Split(policyCreate.filterByLabelIDs, ",")
+			for _, id := range ids {
+				pinfo.Filters = append(pinfo.Filters, filter{
+					FilterKind: "label",
+					Value:      id,
+				})
+			}
+		}
+	}
 
 	pinfo.Description = policyCreate.description
 	pinfo.ReplicateExistingImageNow = policyCreate.replicateExistingImageNow
@@ -350,15 +407,13 @@ func createPolicy() {
 
 	pinfo.Trigger.TriggerKind = policyCreate.triggerKind
 
-	fmt.Println("==> policyCreate.triggerKind:", policyCreate.triggerKind)
-
 	p, err := json.Marshal(&pinfo)
 	if err != nil {
 		fmt.Println("err:", err)
 		return
 	}
 
-	fmt.Println("===>", string(p))
+	//fmt.Println("===>", string(p))
 
 	utils.Post(targetURL, string(p))
 }

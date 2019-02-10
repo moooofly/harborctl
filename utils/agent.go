@@ -15,6 +15,15 @@ func AgentGet() *gorequest.SuperAgent {
 	return request
 }
 
+func GetStruct(targetURL string, st interface{}) {
+	fmt.Println("==> GET (with struct)", targetURL)
+
+	c, _ := CookieLoad()
+	request.Get(targetURL).
+		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c).
+		EndStruct(st)
+}
+
 func Get(targetURL string) {
 	fmt.Println("==> GET", targetURL)
 
