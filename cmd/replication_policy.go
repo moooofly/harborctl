@@ -179,17 +179,13 @@ var policyCreateCmd = &cobra.Command{
 // - https://github.com/moooofly/harborctl/issues/30
 // - https://github.com/moooofly/harborctl/issues/31
 var policyCreate struct {
-	// REQUIRED params
 
-	// policyInfo.name
+	// REQUIRED params
 	replicationRuleName string
-	// policyInfo.projects[i].name
-	sourceProjectName string
-	// policyInfo.targets[i].name
-	endpointName string
+	sourceProjectName   string
+	endpointName        string
 
 	// OPTIONAL params
-
 	description               string
 	replicateExistingImageNow bool
 	replicateDeletion         bool
@@ -276,79 +272,79 @@ func initPolicyCreate() {
 		"The label IDs used as filter. NOTE: you can specify multiple label IDs seperated by comma.")
 }
 
+type filter struct {
+	FilterKind string `json:"kind,omitempty"`
+
+	// NOTE: from Harbor UI, find that the type of 'value' can be either string or int
+	Value string `json:"value,omitempty"`
+
+	// NOTE: these two items are from swagger UI, but seems not being used in fact, remove later
+	//Pattern    string `json:"pattern,omitempty"`
+	//Metadata   struct {
+	//} `json:"metadata,omitempty"`
+}
+
+type policyInfo struct {
+	// TODO(moooofly): this parameter should not be included, remove later
+	// ID          int    `json:"id"`
+
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	// NOTE: per Harbor UI, only one project can be specified as source project each time.
+	Projects []struct {
+		ProjectID         int    `json:"project_id"`
+		OwnerID           int    `json:"owner_id"`
+		ProjectName       string `json:"name"`
+		CreationTime      string `json:"creation_time"`
+		UpdateTime        string `json:"update_time"`
+		Deleted           bool   `json:"deleted"`
+		OwnerName         string `json:"owner_name"`
+		Togglable         bool   `json:"togglable"`
+		CurrentUserRoleID int    `json:"current_user_role_id"`
+		RepoCount         int    `json:"repo_count"`
+		ChartCount        int    `json:"chart_count"`
+		Metadata          struct {
+			Public             string `json:"public"`
+			EnableContentTrust string `json:"enable_content_trust"`
+			PreventVul         string `json:"prevent_vul"`
+			Severity           string `json:"severity"`
+			AutoScan           string `json:"auto_scan"`
+		} `json:"metadata"`
+	} `json:"projects"`
+	// NOTE: per Harbor UI, only one target can be specified as destination target each time.
+	Targets []struct {
+		ID           int    `json:"id"`
+		Endpoint     string `json:"endpoint"`
+		EndpointName string `json:"name"`
+		Username     string `json:"username"`
+		Password     string `json:"password"`
+		Type         int    `json:"type"`
+		Insecure     bool   `json:"insecure"`
+		CreationTime string `json:"creation_time"`
+		UpdateTime   string `json:"update_time"`
+	} `json:"targets"`
+	Trigger struct {
+		TriggerKind   string `json:"kind"`
+		ScheduleParam struct {
+			Type    string `json:"type"`
+			Weekday int    `json:"weekday"`
+			Offtime int    `json:"offtime"`
+		} `json:"schedule_param"`
+	} `json:"trigger"`
+
+	Filters []filter `json:"filters"`
+
+	ReplicateExistingImageNow bool `json:"replicate_existing_image_now"`
+	ReplicateDeletion         bool `json:"replicate_deletion"`
+
+	// TODO(moooofly): these three parameters should not be included, remove later
+	//CreationTime  string `json:"creation_time"`
+	//UpdateTime    string `json:"update_time"`
+	//ErrorJobCount int    `json:"error_job_count"`
+}
+
 func createPolicy() {
 	targetURL := policyURL + "/replication"
-
-	type filter struct {
-		FilterKind string `json:"kind,omitempty"`
-
-		// NOTE: from Harbor UI, find that the type of 'value' can be either string or int
-		Value string `json:"value,omitempty"`
-
-		// NOTE: these two items are from swagger UI, but seems not being used in fact, remove later
-		//Pattern    string `json:"pattern,omitempty"`
-		//Metadata   struct {
-		//} `json:"metadata,omitempty"`
-	}
-
-	type policyInfo struct {
-		// TODO(moooofly): this parameter should not be included, remove later
-		// ID          int    `json:"id"`
-
-		Name        string `json:"name"`
-		Description string `json:"description"`
-		// NOTE: per Harbor UI, only one project can be specified as source project each time.
-		Projects []struct {
-			ProjectID         int    `json:"project_id"`
-			OwnerID           int    `json:"owner_id"`
-			ProjectName       string `json:"name"`
-			CreationTime      string `json:"creation_time"`
-			UpdateTime        string `json:"update_time"`
-			Deleted           bool   `json:"deleted"`
-			OwnerName         string `json:"owner_name"`
-			Togglable         bool   `json:"togglable"`
-			CurrentUserRoleID int    `json:"current_user_role_id"`
-			RepoCount         int    `json:"repo_count"`
-			ChartCount        int    `json:"chart_count"`
-			Metadata          struct {
-				Public             string `json:"public"`
-				EnableContentTrust string `json:"enable_content_trust"`
-				PreventVul         string `json:"prevent_vul"`
-				Severity           string `json:"severity"`
-				AutoScan           string `json:"auto_scan"`
-			} `json:"metadata"`
-		} `json:"projects"`
-		// NOTE: per Harbor UI, only one target can be specified as destination target each time.
-		Targets []struct {
-			ID           int    `json:"id"`
-			Endpoint     string `json:"endpoint"`
-			EndpointName string `json:"name"`
-			Username     string `json:"username"`
-			Password     string `json:"password"`
-			Type         int    `json:"type"`
-			Insecure     bool   `json:"insecure"`
-			CreationTime string `json:"creation_time"`
-			UpdateTime   string `json:"update_time"`
-		} `json:"targets"`
-		Trigger struct {
-			TriggerKind   string `json:"kind"`
-			ScheduleParam struct {
-				Type    string `json:"type"`
-				Weekday int    `json:"weekday"`
-				Offtime int    `json:"offtime"`
-			} `json:"schedule_param"`
-		} `json:"trigger"`
-
-		Filters []filter `json:"filters"`
-
-		ReplicateExistingImageNow bool `json:"replicate_existing_image_now"`
-		ReplicateDeletion         bool `json:"replicate_deletion"`
-
-		// TODO(moooofly): these three parameters should not be included, remove later
-		//CreationTime  string `json:"creation_time"`
-		//UpdateTime    string `json:"update_time"`
-		//ErrorJobCount int    `json:"error_job_count"`
-	}
 
 	// NOTE: Here are the main steps that Harbor UI does
 	//
@@ -421,8 +417,8 @@ func createPolicy() {
 // policyUpdateCmd represents the update command
 var policyUpdateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Put modifies name, description, target and enablement of a policy.",
-	Long: `This endpoint let user update policy name, description, target and enablement.
+	Short: "Update policy name, description, target and etc.",
+	Long: `This endpoint let user update policy name, description, target and etc.
 
 NOTE:
 - There is a related issue at https://github.com/moooofly/harborctl/issues/33
@@ -436,9 +432,26 @@ NOTE:
 var policyUpdate struct {
 	ID int64
 
-	// policyupdate
-	name        string
-	description string
+	// REQUIRED params
+	replicationRuleName string
+	sourceProjectName   string
+	endpointName        string
+
+	// OPTIONAL params
+	description               string
+	replicateExistingImageNow bool
+	replicateDeletion         bool
+
+	// for trigger
+	triggerKind     string
+	scheduleType    string // only used when triggerKind is 'Scheduled'
+	scheduleWeekday int64  // only used when scheduleType is 'Weekly'
+	scheduleOfftime int64  // only used when triggerKind is 'Scheduled'
+
+	// for filters
+	filterByRepoName string
+	filterByTagName  string
+	filterByLabelIDs string
 }
 
 func initPolicyUpdate() {
@@ -450,23 +463,131 @@ func initPolicyUpdate() {
 		"(REQUIRED) The ID of the policy to be updated.")
 	policyUpdateCmd.MarkFlagRequired("id")
 
-	policyUpdateCmd.Flags().StringVarP(&policyUpdate.name,
-		"name",
-		"n", "",
-		"(REQUIRED) The name of the policy to be updated.")
-	policyUpdateCmd.MarkFlagRequired("name")
+	policyUpdateCmd.Flags().StringVarP(&policyUpdate.triggerKind,
+		"trigger_kind",
+		"", "Manual",
+		"The replication policy trigger kind. The valid values are 'Manual', 'Immediate' and 'Scheduled'.")
+	policyUpdateCmd.Flags().StringVarP(&policyUpdate.scheduleType,
+		"schedule_type",
+		"", "Daily",
+		"Optional, only used when trigger kind is 'Scheduled'. The valid values are 'Daily' and 'Weekly'.")
+	policyUpdateCmd.Flags().Int64VarP(&policyUpdate.scheduleWeekday,
+		"schedule_weekday",
+		"", 1,
+		"Optional, only used when schedule type is 'Weekly'. The valid values are 1-7.")
+	policyUpdateCmd.Flags().Int64VarP(&policyUpdate.scheduleOfftime,
+		"schedule_offtime",
+		"", 0,
+		"The time offset with the UTC 00:00 in seconds.(e.g. the offtime of '8:00 AM' is 0)")
+
+	// By "GET /api/policies/replication?name=<xxx>" to check if the replication rule with name already exists.
+	policyUpdateCmd.Flags().StringVarP(&policyUpdate.replicationRuleName,
+		"replication_rule_name",
+		"r", "",
+		"(REQUIRED) The name of the replication rule.")
+	policyUpdateCmd.MarkFlagRequired("replication_rule_name")
+
+	// By "GET /api/projects?name=<yyy>" to get source project info to be replicated.
+	policyUpdateCmd.Flags().StringVarP(&policyUpdate.sourceProjectName,
+		"source_project_name",
+		"s", "",
+		"(REQUIRED) The name of the source project.")
+	policyUpdateCmd.MarkFlagRequired("source_project_name")
+
+	// By "GET /api/targets?name=<zzz>" to get the endpoint info to replicate to.
+	policyUpdateCmd.Flags().StringVarP(&policyUpdate.endpointName,
+		"endpoint_name",
+		"e", "",
+		"(REQUIRED) The name of the endpoint.")
+	policyUpdateCmd.MarkFlagRequired("endpoint_name")
 
 	policyUpdateCmd.Flags().StringVarP(&policyUpdate.description,
 		"description",
 		"d", "",
-		"(REQUIRED) The description of the policy to be updated.")
-	policyUpdateCmd.MarkFlagRequired("description")
+		"The description of the replication rule.")
+
+	policyUpdateCmd.Flags().BoolVarP(&policyUpdate.replicateExistingImageNow,
+		"replicate_existing_image_now",
+		"", true,
+		"Whether to replicate the existing images now.")
+	policyUpdateCmd.Flags().BoolVarP(&policyUpdate.replicateDeletion,
+		"replicate_deletion",
+		"", false,
+		"Whether to replicate the deletion operation.")
+
+	// for filters
+	policyUpdateCmd.Flags().StringVarP(&policyUpdate.filterByRepoName,
+		"repo_name_as_filter",
+		"", "",
+		"The repository name used as filter.")
+	policyUpdateCmd.Flags().StringVarP(&policyUpdate.filterByTagName,
+		"tag_name_as_filter",
+		"", "",
+		"The tag name used as filter.")
+	policyUpdateCmd.Flags().StringVarP(&policyUpdate.filterByLabelIDs,
+		"label_ids_as_filter",
+		"", "",
+		"The label IDs used as filter. NOTE: you can specify multiple label IDs seperated by comma.")
 }
 
 func updatePolicy() {
 	targetURL := policyURL + "/replication/" + strconv.FormatInt(policyUpdate.ID, 10)
 
-	// TODO(moooofly): need do something like createPolicy()
+	var pinfo policyInfo
 
-	utils.Put(targetURL, "")
+	// NOTE: not identify whether this replication rule exists or not by name, but it's ok, I think
+	pinfo.Name = policyUpdate.replicationRuleName
+
+	getSrcPrjURL := utils.URLGen("/api/projects") + "?name=" + policyUpdate.sourceProjectName
+	utils.GetStruct(getSrcPrjURL, &pinfo.Projects)
+	//fmt.Println("pinfo.Project =>", pinfo.Projects)
+
+	getDstTargetURL := utils.URLGen("/api/targets") + "?name=" + policyUpdate.endpointName
+	utils.GetStruct(getDstTargetURL, &pinfo.Targets)
+	//fmt.Println("pinfo.Targets =>", pinfo.Targets)
+
+	if policyUpdate.filterByRepoName == "" && policyUpdate.filterByTagName == "" && policyUpdate.filterByLabelIDs == "" {
+		// FIXME: it seems that the value of "filters" after json.Marshal can either "null" or "[]"
+		//pinfo.Filters = make([]filter, 0)
+	} else {
+
+		if policyUpdate.filterByRepoName != "" {
+			pinfo.Filters = append(pinfo.Filters, filter{
+				FilterKind: "repository",
+				Value:      policyUpdate.filterByRepoName,
+			})
+		}
+
+		if policyUpdate.filterByTagName != "" {
+			pinfo.Filters = append(pinfo.Filters, filter{
+				FilterKind: "tag",
+				Value:      policyUpdate.filterByTagName,
+			})
+		}
+
+		// NOTE: there is a related issue https://github.com/moooofly/harborctl/issues/30#issuecomment-462120209
+		if policyUpdate.filterByLabelIDs != "" {
+			ids := strings.Split(policyUpdate.filterByLabelIDs, ",")
+			for _, id := range ids {
+				pinfo.Filters = append(pinfo.Filters, filter{
+					FilterKind: "label",
+					Value:      id,
+				})
+			}
+		}
+	}
+
+	pinfo.Description = policyUpdate.description
+	pinfo.ReplicateExistingImageNow = policyUpdate.replicateExistingImageNow
+	pinfo.ReplicateDeletion = policyUpdate.replicateDeletion
+
+	pinfo.Trigger.TriggerKind = policyUpdate.triggerKind
+
+	p, err := json.Marshal(&pinfo)
+	if err != nil {
+		fmt.Println("err:", err)
+		return
+	}
+
+	utils.Put(targetURL, string(p))
 }
