@@ -1,3 +1,14 @@
+<a name="0.15.0"></a>
+# [0.15.0](https://github.com/moooofly/harborctl/compare/v0.14.0...v0.15.0) (2019-02-10)
+
+
+### Features
+
+* **policy-api:** add "POST /policies/replication" API ([a78f338](https://github.com/moooofly/harborctl/commit/a78f338))
+* **policy-api:** add "PUT /policies/replication" API ([e68432e](https://github.com/moooofly/harborctl/commit/e68432e))
+
+
+
 <a name="0.14.0"></a>
 # [0.14.0](https://github.com/moooofly/harborctl/compare/v0.13.0...v0.14.0) (2019-02-08)
 
