@@ -18,6 +18,7 @@ This project offer a command-line interface to the Harbor API, you can use it to
 
 ## NOTE
 
+- This project is initiated by "[New Proposal: A Go CLI Client for Harbor](https://github.com/goharbor/community/pull/18)".
 - This project named [`harborctl`](https://github.com/moooofly/harborctl) is still under developement, which is based on harbor v1.6.0-66709daa and swagger api version 1.6.0.
 - Another project named `harbor-go-client` is based on harbor v1.5.0-d59c257e and swagger api version 1.4.0. If you want to use this CLI tool with Harbro v1.6.0+, you may encounter incompatible issues. See "[The issue with API version](https://github.com/moooofly/harbor-go-client/issues/27)" for more details.
 
