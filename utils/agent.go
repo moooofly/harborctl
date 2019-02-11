@@ -60,13 +60,13 @@ func Multipart(targetURL string, files ...string) {
 	case 1:
 		request.Post(targetURL).
 			Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c).
-			Type(gorequest.TypeMultipart).
+			Type("multipart").
 			SendFile(files[0]).
 			End(printStatus)
 	case 2:
 		request.Post(targetURL).
 			Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c).
-			Type(gorequest.TypeMultipart).
+			Type("multipart").
 			SendFile(files[0]).
 			SendFile(files[1]).
 			End(printStatus)
