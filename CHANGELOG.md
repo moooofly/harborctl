@@ -1,3 +1,8 @@
+<a name="1.0.1"></a>
+# [1.0.1](https://github.com/moooofly/harborctl/compare/v1.0.0...v1.0.1) (2019-02-11)
+
+* fix multipart conpatibility issue of gorequest for travis ci ([e29e067](https://github.com/moooofly/harborctl/commit/e29e067))
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/moooofly/harborctl/compare/v0.15.0...v1.0.0) (2019-02-11)
 
