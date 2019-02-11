@@ -1,3 +1,13 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/moooofly/harborctl/compare/v1.0.1...v1.1.0) (2019-02-11)
+
+
+### Features
+
+* add .goreleaser.yml ([aeb9c07](https://github.com/moooofly/harborctl/commit/aeb9c07))
+
+
+
 <a name="1.0.1"></a>
 # [1.0.1](https://github.com/moooofly/harborctl/compare/v1.0.0...v1.0.1) (2019-02-11)
 
