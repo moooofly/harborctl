@@ -1,3 +1,13 @@
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/moooofly/harborctl/compare/v0.15.0...v1.0.0) (2019-02-11)
+
+
+### Features
+
+* add dependency support by glide ([c16d4c7](https://github.com/moooofly/harborctl/commit/c16d4c7))
+
+
+
 <a name="0.15.0"></a>
 # [0.15.0](https://github.com/moooofly/harborctl/compare/v0.14.0...v0.15.0) (2019-02-10)
 
