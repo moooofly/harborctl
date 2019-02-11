@@ -33,7 +33,7 @@ var internalURL string
 var internalCmd = &cobra.Command{
 	Use:   "internal",
 	Short: "'/internal' API.",
-	Long:  `The subcommand of '/internal' hierachy.`,
+	Long:  `The subcommand of '/internal' hierarchy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		internalURL = utils.URLGen("/api/internal")
 	},

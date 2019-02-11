@@ -118,7 +118,7 @@ func loginProc(resp gorequest.Response, body string, errs []error) {
 		return
 	}
 
-	// TODO(moooofly): can do something usefull based on response code
+	// TODO(moooofly): can do something useful based on response code
 	fmt.Println("<== Rsp Status:", resp.Status)
 	fmt.Println("<== Rsp Body:", body)
 

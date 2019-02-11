@@ -33,7 +33,7 @@ import (
 var metadataCmd = &cobra.Command{
 	Use:   "metadata",
 	Short: "'/projects/{project_id}/metadatas' API.",
-	Long:  `The subcommand of '/projects/{project_id}/metadatas' hierachy.`,
+	Long:  `The subcommand of '/projects/{project_id}/metadatas' hierarchy.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Use \"harborctl project metadata --help\" for more information about this command.")
 	},

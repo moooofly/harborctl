@@ -35,7 +35,7 @@ var usergroupURL string
 var usergroupCmd = &cobra.Command{
 	Use:   "usergroup",
 	Short: "'/usergroups' API.",
-	Long:  `The subcommand of '/usergroups' hierachy.`,
+	Long:  `The subcommand of '/usergroups' hierarchy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		usergroupURL = utils.URLGen("/api/usergroups")
 	},

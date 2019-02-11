@@ -36,7 +36,7 @@ var policyURL string
 var policyReplicationCmd = &cobra.Command{
 	Use:   "policy",
 	Short: "'/policies/replication' API.",
-	Long:  `The subcommand of '/policies/replication' hierachy.`,
+	Long:  `The subcommand of '/policies/replication' hierarchy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		policyURL = utils.URLGen("/api/policies")
 	},
@@ -269,7 +269,7 @@ func initPolicyCreate() {
 	policyCreateCmd.Flags().StringVarP(&policyCreate.filterByLabelIDs,
 		"label_ids_as_filter",
 		"", "",
-		"The label IDs used as filter. NOTE: you can specify multiple label IDs seperated by comma.")
+		"The label IDs used as filter. NOTE: you can specify multiple label IDs separated by comma.")
 }
 
 type filter struct {

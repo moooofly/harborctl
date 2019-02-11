@@ -29,7 +29,7 @@ import (
 var currentCmd = &cobra.Command{
 	Use:   "current",
 	Short: "Show info about current login user only.",
-	Long:  `This endpoint is to get the current user infomation (Maybe 'whoami' is a better one).`,
+	Long:  `This endpoint is to get the current user information (Maybe 'whoami' is a better one).`,
 	Run: func(cmd *cobra.Command, args []string) {
 		getCurrentUser()
 	},

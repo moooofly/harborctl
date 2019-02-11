@@ -33,7 +33,7 @@ var systeminfoURL string
 var systeminfoCmd = &cobra.Command{
 	Use:   "systeminfo",
 	Short: "'/systeminfo' API.",
-	Long:  `The subcommand of '/systeminfo' hierachy.`,
+	Long:  `The subcommand of '/systeminfo' hierarchy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		systeminfoURL = utils.URLGen("/api/systeminfo")
 	},

@@ -33,7 +33,7 @@ import (
 var repoLabelCmd = &cobra.Command{
 	Use:   "label",
 	Short: "'/repositories/{repo_name}/labels' API.",
-	Long:  `The subcommand of '/repositories/{repo_name}/labels' hierachy.`,
+	Long:  `The subcommand of '/repositories/{repo_name}/labels' hierarchy.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Use \"harborctl repository label --help\" for more information about this command.")
 	},

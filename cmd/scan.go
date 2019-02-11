@@ -31,7 +31,7 @@ import (
 var scanCmd = &cobra.Command{
 	Use:   "scan",
 	Short: "'/jobs/scan' API.",
-	Long:  `The subcommand of '/jobs/scan' hierachy.`,
+	Long:  `The subcommand of '/jobs/scan' hierarchy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		jobURL = utils.URLGen("/api/jobs")
 	},

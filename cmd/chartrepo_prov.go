@@ -31,7 +31,7 @@ import (
 var provCmd = &cobra.Command{
 	Use:   "prov",
 	Short: "'/chartrepo/{repo}/prov' API.",
-	Long:  `The subcommand of '/chartrepo/{repo}/prov' hierachy.`,
+	Long:  `The subcommand of '/chartrepo/{repo}/prov' hierarchy.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Use \"harborctl chartrepo prov --help\" for more information about this command.")
 	},

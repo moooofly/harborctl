@@ -35,7 +35,7 @@ var projectURL string
 var projectCmd = &cobra.Command{
 	Use:   "project",
 	Short: "'/projects' API.",
-	Long:  `The subcommand of '/projects' hierachy.`,
+	Long:  `The subcommand of '/projects' hierarchy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		projectURL = utils.URLGen("/api/projects")
 	},
@@ -299,7 +299,7 @@ var prjList struct {
 	name string
 
 	// NOTE:
-	// As per swagger file defination, the type of 'public' is boolean.
+	// As per swagger file definition, the type of 'public' is boolean.
 	// I change the type of 'public' from boolean to string in order for three-valued logic
 	// 1. If true/TRUE/1, only public projects returned
 	// 2. If false/FALSE/0, only private projects returned

@@ -31,7 +31,7 @@ import (
 var chartCmd = &cobra.Command{
 	Use:   "chart",
 	Short: "'/chartrepo/{repo}/charts' API.",
-	Long:  `The subcommand of '/chartrepo/{repo}/charts' hierachy.`,
+	Long:  `The subcommand of '/chartrepo/{repo}/charts' hierarchy.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Use \"harborctl chartrepo chart --help\" for more information about this command.")
 	},

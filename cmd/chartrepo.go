@@ -33,7 +33,7 @@ var chartrepoURL string
 var chartrepoCmd = &cobra.Command{
 	Use:   "chartrepo",
 	Short: "'/chartrepo' API.",
-	Long:  `The subcommand of '/chartrepo' hierachy.`,
+	Long:  `The subcommand of '/chartrepo' hierarchy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		chartrepoURL = utils.URLGen("/api/chartrepo")
 	},

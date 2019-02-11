@@ -38,7 +38,7 @@ var jobURL string
 var replicationCmd = &cobra.Command{
 	Use:   "replication",
 	Short: "'/replications' API",
-	Long:  `The subcommand of '/replications' hierachy.`,
+	Long:  `The subcommand of '/replications' hierarchy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		replicationURL = utils.URLGen("/api/replications")
 		jobURL = utils.URLGen("/api/jobs")

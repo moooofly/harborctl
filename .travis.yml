@@ -19,7 +19,7 @@ install:
 script:
   - make lint
   - make test
-  - make misspell
+  - make build
 
 notifications:
   email: fei.sun@liulishuo.com

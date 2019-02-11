@@ -32,7 +32,7 @@ import (
 var scanallCmd = &cobra.Command{
 	Use:   "scanall",
 	Short: "Scan all images of the registry. (NOTE: need Clair deployed)",
-	Long: `The server will launch different jobs to scan each image on the regsitry, so this is equivalent to calling the API to
+	Long: `The server will launch different jobs to scan each image on the registry, so this is equivalent to calling the API to
 scan the image one by one in background, so there's no way to track the overall status of the "scan all" action.
 
 NOTE:
