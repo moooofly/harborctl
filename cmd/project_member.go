@@ -33,7 +33,7 @@ import (
 var memberCmd = &cobra.Command{
 	Use:   "member",
 	Short: "'/projects/{project_id}/members' API.",
-	Long:  `The subcommand of '/projects/{project_id}/members' hierachy.`,
+	Long:  `The subcommand of '/projects/{project_id}/members' hierarchy.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Use \"harborctl project member --help\" for more information about this command.")
 	},

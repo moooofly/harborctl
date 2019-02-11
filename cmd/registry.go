@@ -35,7 +35,7 @@ var targetsURL string
 var targetCmd = &cobra.Command{
 	Use:   "registry",
 	Short: "'/targets' API.",
-	Long:  `The subcommand of '/targets' hierachy.`,
+	Long:  `The subcommand of '/targets' hierarchy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		targetsURL = utils.URLGen("/api/targets")
 	},

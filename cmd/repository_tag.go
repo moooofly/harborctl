@@ -31,7 +31,7 @@ import (
 var tagCmd = &cobra.Command{
 	Use:   "tag",
 	Short: "'/repositories/{repo_name}/tags' API.",
-	Long:  `The subcommand of '/repositories/{repo_name}/tags' hierachy.`,
+	Long:  `The subcommand of '/repositories/{repo_name}/tags' hierarchy.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Use \"harborctl repository tag --help\" for more information about this command.")
 	},

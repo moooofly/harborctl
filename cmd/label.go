@@ -35,7 +35,7 @@ var labelURL string
 var labelCmd = &cobra.Command{
 	Use:   "label",
 	Short: "'/labels' API.",
-	Long:  `The subcommand of '/labels' hierachy.`,
+	Long:  `The subcommand of '/labels' hierarchy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		labelURL = utils.URLGen("/api/labels")
 	},

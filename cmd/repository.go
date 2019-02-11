@@ -35,7 +35,7 @@ var repositoryURL string
 var repositoryCmd = &cobra.Command{
 	Use:   "repository",
 	Short: "'/repositories' API.",
-	Long:  `The subcommand of '/repositories' hierachy.`,
+	Long:  `The subcommand of '/repositories' hierarchy.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		repositoryURL = utils.URLGen("/api/repositories")
 	},

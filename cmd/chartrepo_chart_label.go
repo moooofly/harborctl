@@ -33,7 +33,7 @@ import (
 var chartLabelCmd = &cobra.Command{
 	Use:   "label",
 	Short: "'/chartrepo/{repo}/charts/{name}/{version}/labels' API.",
-	Long:  `'The subcommand of '/chartrepo/{repo}/charts/{name}/{version}/labels' hierachy.`,
+	Long:  `'The subcommand of '/chartrepo/{repo}/charts/{name}/{version}/labels' hierarchy.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Use \"harborctl chartrepo chart label --help\" for more information about this command.")
 	},
